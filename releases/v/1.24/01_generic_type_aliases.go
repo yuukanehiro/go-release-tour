@@ -15,7 +15,7 @@ import (
 // 注意: これらはGo 1.24の新機能です。現在のGoバージョンでは動作しません。
 // 以下は概念を示すための疑似コードです。
 
-// Go 1.24での Generic type alias の例:
+// Go 1.24でのジェネリック型エイリアスの例:
 // type List[T any] = []T
 // type Dict[K comparable, V any] = map[K]V
 // type Transformer[T, U any] = func(T) U
@@ -33,7 +33,7 @@ type GenericList[T any] []T
 type GenericDict[K comparable, V any] map[K]V
 type GenericTransformer[T, U any] func(T) U
 
-// 結果構造体
+// 結果を表す構造体
 type Result[T any] struct {
 	Value T
 	Error error
@@ -74,7 +74,7 @@ func main() {
 	fmt.Printf("Generic numbers: %v\n", genericNumbers)
 	fmt.Printf("Generic strings: %v\n", genericStrings)
 
-	// Using Result type alias
+	// Result型エイリアスの使用
 	successResult := Result[string]{
 		Value: "Operation completed",
 		Error: nil,
@@ -89,7 +89,7 @@ func main() {
 	fmt.Printf("Error result: %+v\n", errorResult)
 
 	// 型エイリアスの互換性を実証
-	fmt.Println("\n--- Type Alias Compatibility ---")
+	fmt.Println("\n--- 型エイリアスの互換性 ---")
 
 	// 型エイリアスは基底型と同一
 	var regularSlice []int = []int{1, 2, 3}
@@ -110,8 +110,8 @@ func main() {
 	printSlice(regularSlice)
 	printSlice(aliasSlice)
 
-	// Go 1.24での Generic Type Alias の期待される動作
-	fmt.Println("\n--- Go 1.24 Generic Type Alias 期待動作 ---")
+	// Go 1.24でのジェネリック型エイリアスの期待される動作
+	fmt.Println("\n--- Go 1.24 ジェネリック型エイリアス期待動作 ---")
 	fmt.Println("Go 1.24では以下のような書き方が可能になります:")
 	fmt.Println("type List[T any] = []T")
 	fmt.Println("type Dict[K comparable, V any] = map[K]V")
@@ -127,7 +127,7 @@ func processData[T any](data GenericList[T], transform GenericTransformer[T, str
 	return result
 }
 
-// Go 1.24でのGeneric Type Aliasを使った関数（期待される形）
+// Go 1.24でのジェネリック型エイリアスを使った関数（期待される形）
 // func processDataWithAlias[T any](data List[T], transform Transformer[T, string]) List[string] {
 //     result := make(List[string], len(data))
 //     for i, item := range data {

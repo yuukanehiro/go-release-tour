@@ -26,6 +26,20 @@ header h1 {
     font-weight: 300;
 }
 
+.clickable-title {
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.clickable-title:hover {
+    opacity: 0.8;
+    transform: scale(1.02);
+}
+
+.clickable-title:active {
+    transform: scale(0.98);
+}
+
 header p {
     font-size: 1.1rem;
     opacity: 0.9;
@@ -230,12 +244,124 @@ header p {
 }
 
 .code-header {
-    background: #f8f9fa;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #e9ecef;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 1rem 1.5rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.editor-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+#theme-selector {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    font-size: 0.9rem;
+}
+
+#code-editor-container {
+    position: relative;
+}
+
+/* CodeMirror specific styles */
+.CodeMirror {
+    height: 400px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    border: none;
+}
+
+.CodeMirror-scroll {
+    min-height: 400px;
+}
+
+.CodeMirror-focused .CodeMirror-cursor {
+    border-left: 1px solid #00ADD8;
+}
+
+.CodeMirror-gutters {
+    border-right: 1px solid #e9ecef;
+    background-color: #f8f9fa;
+}
+
+.CodeMirror-linenumber {
+    color: #6c757d;
+    padding: 0 8px;
+    font-size: 13px;
+}
+
+/* エディター展開機能 */
+.code-section.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    background: white;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.code-section.expanded .code-header {
+    flex-shrink: 0;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 1rem 1.5rem;
+}
+
+.code-section.expanded #code-editor-container {
+    flex: 1;
+    overflow: hidden;
+}
+
+.code-section.expanded .CodeMirror {
+    height: 100% !important;
+    border: none;
+}
+
+.code-section.expanded .CodeMirror-scroll {
+    min-height: 100%;
+    overflow: auto !important;
+}
+
+#expand-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+#expand-btn:hover {
+    background: #545b62;
+}
+
+#expand-btn:active {
+    background: #495057;
+}
+
+/* エディターが展開されている時のボタンスタイル */
+.code-section.expanded #expand-btn {
+    background: #dc3545;
+}
+
+.code-section.expanded #expand-btn:hover {
+    background: #c82333;
 }
 
 .code-header h4 {
@@ -398,6 +524,8 @@ header p {
     font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
 }
 
 .version-badge.latest {
@@ -408,6 +536,17 @@ header p {
 .version-badge.stable {
     background: linear-gradient(135deg, #007bff, #6610f2);
     color: white;
+}
+
+.version-badge.revolutionary {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 5px rgba(255, 107, 107, 0.5); }
+    to { box-shadow: 0 0 15px rgba(255, 107, 107, 0.8); }
 }
 
 .version-features {
@@ -438,6 +577,15 @@ header p {
     color: #6c757d;
     font-style: italic;
     margin-top: 0.5rem;
+}
+
+.feature-desc {
+    font-size: 0.85rem;
+    color: #ff6b6b;
+    font-weight: 600;
+    font-style: italic;
+    margin-top: 0.5rem;
+    text-align: center;
 }
 
 .start-learning-btn {
@@ -527,3 +675,21 @@ header p {
 .string { color: #009900; }
 .comment { color: #999999; font-style: italic; }
 .number { color: #cc6600; }
+
+/* Welcome screen specific styles */
+#welcome-screen ~ .code-section,
+#welcome-screen ~ .output-section {
+    display: none;
+}
+
+/* Show code section and output section when lesson view is active */
+#lesson-view:not([style*="display: none"]) ~ .code-section,
+#lesson-view:not([style*="display: none"]) ~ .output-section {
+    display: block;
+}
+
+/* Hide code and output sections when welcome screen is displayed */
+body:has(#welcome-screen:not([style*="display: none"])) .code-section,
+body:has(#welcome-screen:not([style*="display: none"])) .output-section {
+    display: none !important;
+}

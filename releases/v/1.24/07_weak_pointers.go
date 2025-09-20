@@ -28,9 +28,13 @@ type WeakRef[T any] struct {
 
 // NewWeakRef - 弱参照を作成
 func NewWeakRef[T any](obj *T) *WeakRef[T] {
+	var id uintptr
+	if obj != nil {
+		id = uintptr(unsafe.Pointer(obj))
+	}
 	return &WeakRef[T]{
 		ptr: obj,
-		id:  uintptr(unsafe.Pointer(obj)),
+		id:  id,
 	}
 }
 
@@ -249,6 +253,64 @@ func demonstrateWeakCache() {
 			delete(cache, "key1")
 		}
 	}
+}
+
+// showExpectedAPI - 期待されるAPIを紹介
+func showExpectedAPI() {
+	fmt.Println("\n--- 期待されるAPI例 ---")
+	apiExample := `package main
+
+import (
+    "weak"
+    "fmt"
+)
+
+func main() {
+    // 強参照オブジェクト
+    obj := &MyStruct{data: "important data"}
+
+    // 弱参照を作成
+    weakRef := weak.Make(obj)
+
+    // 弱参照からオブジェクトを取得
+    if value, ok := weakRef.Value(); ok {
+        fmt.Printf("Object still exists: %s\n", value.data)
+    }
+
+    // オブジェクトを削除
+    obj = nil
+    runtime.GC()
+
+    // オブジェクトが回収されているかチェック
+    if _, ok := weakRef.Value(); !ok {
+        fmt.Println("Object has been garbage collected")
+    }
+}`
+
+	fmt.Println(apiExample)
+}
+
+// showSummaryAndCaveats - まとめと注意点
+func showSummaryAndCaveats() {
+	fmt.Println("\n--- まとめと注意点 ---")
+	fmt.Println("利点:")
+	fmt.Println("✅ メモリリークの防止")
+	fmt.Println("✅ 自動的なキャッシュクリーンアップ")
+	fmt.Println("✅ 親子関係での安全な参照")
+	fmt.Println("✅ オブザーバーパターンの改善")
+
+	fmt.Println("\n注意点:")
+	fmt.Println("⚠️  オブジェクトがいつ回収されるか制御不可")
+	fmt.Println("⚠️  弱参照自体もメモリを消費")
+	fmt.Println("⚠️  アクセス時に毎回有効性をチェック必要")
+	fmt.Println("⚠️  過度な使用はパフォーマンスに影響")
+
+	fmt.Println("\n使用場面:")
+	fmt.Println("1. 親子関係での循環参照回避")
+	fmt.Println("2. キャッシュシステム")
+	fmt.Println("3. オブザーバーパターン")
+	fmt.Println("4. イベントリスナー管理")
+	fmt.Println("5. リソース管理システム")
 }
 
 // % go run 07_weak_pointers.go

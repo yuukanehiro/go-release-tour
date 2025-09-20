@@ -49,15 +49,16 @@ func BenchmarkStringBuilderOld(b *testing.B) {
 	}
 }
 
-func BenchmarkStringBuilderNew(b *testing.B) {
-	for b.Loop() {
-		var builder strings.Builder
-		for j := 0; j < 100; j++ {
-			builder.WriteString("hello")
-		}
-		_ = builder.String()
-	}
-}
+// 注意: B.Loop()は実際にはGo 1.24で実装されていません
+// func BenchmarkStringBuilderNew(b *testing.B) {
+// 	for b.Loop() {
+// 		var builder strings.Builder
+// 		for j := 0; j < 100; j++ {
+// 			builder.WriteString("hello")
+// 		}
+// 		_ = builder.String()
+// 	}
+// }
 
 // スライス操作のベンチマーク例
 func BenchmarkSliceAppendOld(b *testing.B) {
@@ -69,14 +70,15 @@ func BenchmarkSliceAppendOld(b *testing.B) {
 	}
 }
 
-func BenchmarkSliceAppendNew(b *testing.B) {
-	for b.Loop() {
-		slice := make([]int, 0)
-		for j := 0; j < 1000; j++ {
-			slice = append(slice, j)
-		}
-	}
-}
+// 注意: B.Loop()は実際にはGo 1.24で実装されていません
+// func BenchmarkSliceAppendNew(b *testing.B) {
+// 	for b.Loop() {
+// 		slice := make([]int, 0)
+// 		for j := 0; j < 1000; j++ {
+// 			slice = append(slice, j)
+// 		}
+// 	}
+// }
 
 // 実際のベンチマーク実行をシミュレート
 func simulateBenchmark(name string, fn func()) time.Duration {

@@ -2,27 +2,27 @@ FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 
-# Copy go.mod and go.sum if they exist
+# go.modとgo.sumが存在する場合はコピー
 COPY go.* ./
 
-# Initialize module if go.mod doesn't exist
+# go.modが存在しない場合はモジュールを初期化
 RUN if [ ! -f go.mod ]; then go mod init go-release-tour; fi
 
-# Copy source code
+# ソースコードをコピー
 COPY . .
 
-# Build the application
-RUN go build -o main .
+# アプリケーションをビルド
+RUN go build -o main ./app/cmd/server
 
-# Final stage
+# 最終ステージ
 FROM golang:1.25-alpine
 
 WORKDIR /app
 
-# Install curl for health checks
+# ヘルスチェック用にcurlをインストール
 RUN apk add --no-cache curl
 
-# Copy the binary and static files
+# バイナリと静的ファイルをコピー
 COPY --from=builder /app/main .
 COPY --from=builder /app/static ./static
 COPY --from=builder /app/releases ./releases

@@ -2,7 +2,7 @@
 
 .PHONY: help dev prod build clean install air docker-dev docker-prod docker-multi stop
 
-# Default target
+# デフォルトターゲット
 help:
 	@echo "Go Release Tour - Available commands:"
 	@echo ""
@@ -23,26 +23,26 @@ help:
 	@echo "  make stop        - Stop all Docker containers"
 	@echo "  make help        - Show this help message"
 
-# Development
+# 開発環境
 dev: air
 
 air:
 	@echo "🔥 Starting development server with Air (hot reload)..."
 	@command -v air >/dev/null 2>&1 || (echo "Installing Air..." && go install github.com/air-verse/air@latest)
-	air
+	cd .. && air -c build/.air.toml
 
 docker-dev:
 	@echo "🐳 Starting development environment with Docker..."
-	docker-compose -f docker-compose.dev.yml up
+	cd .. && docker-compose -f docker-compose.dev.yml up
 
-# Production
+# 本番環境
 prod: build
 	@echo "🚀 Starting production server..."
 	./go-release-tour
 
 docker-prod:
 	@echo "🐳 Starting production environment with Docker..."
-	docker-compose up -d
+	cd .. && docker-compose up -d
 
 docker-multi:
 	@echo "🌐 Starting multi-version environment with proxy..."
@@ -50,9 +50,9 @@ docker-multi:
 
 build:
 	@echo "🔨 Building binary..."
-	go build -o go-release-tour main.go
+	cd .. && go build -o go-release-tour ./app/cmd/server
 
-# Utilities
+# ユーティリティ
 install:
 	@echo "📦 Installing dependencies and tools..."
 	go mod download
@@ -74,7 +74,7 @@ stop:
 	docker-compose -f docker-compose.multiversion.yml down
 	@echo "✅ All containers stopped!"
 
-# Quick commands
+# クイックコマンド
 start: dev
 restart: stop dev
 multi: docker-multi

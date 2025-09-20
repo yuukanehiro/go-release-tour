@@ -1,16 +1,17 @@
-# Air configuration for Go Release Tour
-# More info: https://github.com/air-verse/air
+# Go Release Tour用のAir設定
+# 詳細情報: https://github.com/air-verse/air
 
-root = "."
+root = ".."
+include_dir = ["app"]
 testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
   args_bin = []
   bin = "./tmp/main"
-  cmd = "go build -o ./tmp/main ."
+  cmd = "go build -o ./tmp/main ./app/cmd/server"
   delay = 1000
-  exclude_dir = ["assets", "tmp", "vendor", "testdata", "node_modules", ".git"]
+  exclude_dir = ["assets", "tmp", "vendor", "testdata", "node_modules", ".git", "go/pkg", "go/bin", "dev", "etc", "bin", "usr", "var", "proc", "sys"]
   exclude_file = []
   exclude_regex = ["_test.go"]
   exclude_unchanged = false

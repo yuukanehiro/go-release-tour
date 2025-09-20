@@ -1,4 +1,4 @@
-# Development Docker Compose for Go Release Tour
+# Go Release Tour用の開発環境Docker Compose
 
 services:
   go-release-tour-dev:

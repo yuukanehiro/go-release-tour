@@ -177,7 +177,7 @@ entries, err := root.ReadDir("uploads")`
 	fmt.Println("5. 入力検証の実装")
 }
 
-// Path traversal攻撃の例と対策
+// パストラバーサル攻撃の例と対策
 func demonstratePathTraversal() {
 	fmt.Println("\n--- Path Traversal 攻撃例 ---")
 
