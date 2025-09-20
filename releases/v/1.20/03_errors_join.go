@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.20では、複数のエラーをまとめる errors.Join 関数が追加され、
 // より柔軟なエラーハンドリングが可能になりました。
+//
+// 参考リンク:
+// - Go 1.20 Release Notes: https://go.dev/doc/go1.20#errors
+// - errors Package: https://pkg.go.dev/errors
 
 //go:build ignore
 // +build ignore

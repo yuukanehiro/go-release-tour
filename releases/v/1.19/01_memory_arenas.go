@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.19では、実験的なメモリアリーナ機能が追加され、
 // 特定の使用パターンでメモリ管理を最適化できるようになりました。
+//
+// 参考リンク:
+// - Go 1.19 Release Notes: https://go.dev/doc/go1.19#arena
+// - arena Package: https://pkg.go.dev/arena
 
 //go:build ignore
 // +build ignore

@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.25では、Linuxコンテナ内でのCPU帯域制限を考慮してGOMAXPROCSのデフォルト値を設定するようになりました。
 // これにより、コンテナのCPU制限に応じて適切なgoroutineの並行度が自動設定されます。
+//
+// 参考リンク:
+// - Go 1.25 Release Notes: https://go.dev/doc/go1.25#runtime
+// - Runtime Package: https://pkg.go.dev/runtime#GOMAXPROCS
 
 //go:build ignore
 // +build ignore

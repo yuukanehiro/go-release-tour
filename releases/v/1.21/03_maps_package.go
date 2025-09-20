@@ -2,6 +2,10 @@
 // 原文: "New maps package for common map operations"
 //
 // 説明: Go 1.21では、マップ操作のためのmapsパッケージが標準ライブラリに追加されました。
+//
+// 参考リンク:
+// - Go 1.21 Release Notes: https://go.dev/doc/go1.21#maps
+// - maps Package: https://pkg.go.dev/maps
 
 //go:build ignore
 // +build ignore

@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.22では、net/http.ServeMuxのパターンマッチングが大幅に改善され、
 // HTTPメソッドの指定とワイルドカードパターンが使用できるようになりました。
+//
+// 参考リンク:
+// - Go 1.22 Release Notes: https://go.dev/doc/go1.22#net-http
+// - net/http Package: https://pkg.go.dev/net/http
 
 //go:build ignore
 // +build ignore

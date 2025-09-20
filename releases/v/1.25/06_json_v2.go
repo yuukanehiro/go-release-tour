@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.25では、改良されたJSON実装を含む実験的なencoding/json/v2パッケージが追加されました。
 // このパッケージは、より高性能で機能豊富なJSON処理を提供します。
+//
+// 参考リンク:
+// - Go 1.25 Release Notes: https://go.dev/doc/go1.25#encoding-json-v2
+// - encoding/json/v2 Package: https://pkg.go.dev/encoding/json/v2
 
 // +build ignore
 

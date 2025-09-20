@@ -2,6 +2,10 @@
 // 原文: "The new os.Root type provides the ability to perform filesystem operations within a specific directory"
 //
 // 説明: 新しいos.Root型により、特定のディレクトリ内でのファイルシステム操作を安全に制限できるようになりました。
+//
+// 参考リンク:
+// - Go 1.24 Release Notes: https://go.dev/doc/go1.24#os
+// - os Package: https://pkg.go.dev/os
 
 //go:build ignore
 // +build ignore

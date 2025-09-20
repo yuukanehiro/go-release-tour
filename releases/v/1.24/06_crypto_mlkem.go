@@ -2,6 +2,11 @@
 // 原文: "New crypto/mlkem package supports post-quantum key exchange mechanism"
 //
 // 説明: 新しいcrypto/mlkemパッケージにより、耐量子暗号化のキー交換メカニズムが利用できるようになりました。
+//
+// 参考リンク:
+// - Go 1.24 Release Notes: https://go.dev/doc/go1.24#crypto-mlkem
+// - crypto/mlkem Package: https://pkg.go.dev/crypto/mlkem
+// - FIPS 203 Standard: https://csrc.nist.gov/pubs/fips/203/final
 
 //go:build ignore
 // +build ignore

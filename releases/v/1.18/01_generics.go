@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.18では、ついにジェネリクス（型パラメーター）が追加され、
 // 型安全で再利用可能なコードが書けるようになりました。
+//
+// 参考リンク:
+// - Go 1.18 Release Notes: https://go.dev/doc/go1.18#generics
+// - Go Language Specification: https://go.dev/ref/spec#Type_parameters
 
 //go:build ignore
 // +build ignore

@@ -2,6 +2,10 @@
 // 原文: "New slices package for common slice operations"
 //
 // 説明: Go 1.21では、スライス操作のためのslicesパッケージが標準ライブラリに追加されました。
+//
+// 参考リンク:
+// - Go 1.21 Release Notes: https://go.dev/doc/go1.21#slices
+// - slices Package: https://pkg.go.dev/slices
 
 //go:build ignore
 // +build ignore

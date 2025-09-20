@@ -1,7 +1,14 @@
 //go:build ignore
 // +build ignore
 
+// Go 1.18 新機能: Type Inference
+// 原文: "Type inference for generics"
+//
 // 説明: Type Inference - ジェネリクスにおける型推論の仕組み
+//
+// 参考リンク:
+// - Go 1.18 Release Notes: https://go.dev/doc/go1.18#generics
+// - Go Language Specification: https://go.dev/ref/spec#Type_inference
 package main
 
 import (

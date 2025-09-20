@@ -2,6 +2,11 @@
 // 原文: "Benchmarks may now use the faster and less error-prone testing.B.Loop method"
 //
 // 説明: 新しいtesting.B.Loop()メソッドにより、従来のb.Nを使用したループより高速で安全なベンチマークが作成できます。
+//
+// 参考リンク:
+// - Go 1.24 Release Notes: https://go.dev/doc/go1.24#testing
+// - testing Package: https://pkg.go.dev/testing
+//
 // 注意: この機能はGo 1.24の新機能で、現在のGoバージョンでは利用できません。
 
 //go:build ignore

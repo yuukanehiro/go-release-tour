@@ -1,7 +1,14 @@
 //go:build ignore
 // +build ignore
 
+// Go 1.18 新機能: Generic Data Structures
+// 原文: "Generic data structures using type parameters"
+//
 // 説明: Generic Data Structures - ジェネリクスを使ったデータ構造の実装
+//
+// 参考リンク:
+// - Go 1.18 Release Notes: https://go.dev/doc/go1.18#generics
+// - Go Language Specification: https://go.dev/ref/spec#Type_parameters
 package main
 
 import (

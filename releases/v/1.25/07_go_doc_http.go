@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.25では、go docコマンドに-httpオプションが追加され、
 // ローカルでドキュメントサーバーを起動できるようになりました。
+//
+// 参考リンク:
+// - Go 1.25 Release Notes: https://go.dev/doc/go1.25#cmd-go-doc
+// - go doc Command: https://pkg.go.dev/cmd/go#hdr-Show_documentation_for_package_or_symbol
 
 // +build ignore
 

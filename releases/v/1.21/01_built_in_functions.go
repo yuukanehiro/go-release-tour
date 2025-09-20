@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.21では、min、max、clearの組み込み関数が追加され、
 // より簡潔なコードが書けるようになりました。
+//
+// 参考リンク:
+// - Go 1.21 Release Notes: https://go.dev/doc/go1.21#language
+// - Go Language Specification: https://go.dev/ref/spec#Built-in_functions
 
 //go:build ignore
 // +build ignore

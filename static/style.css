@@ -693,3 +693,53 @@ body:has(#welcome-screen:not([style*="display: none"])) .code-section,
 body:has(#welcome-screen:not([style*="display: none"])) .output-section {
     display: none !important;
 }
+
+/* 参考リンクのスタイル */
+#lesson-links {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #00ADD8;
+}
+
+#lesson-links h4 {
+    color: #00ADD8;
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.links-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.links-container a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: white;
+    color: #00ADD8;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.links-container a:hover {
+    background: #00ADD8;
+    color: white;
+    border-color: #00ADD8;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 173, 216, 0.2);
+}
+
+.links-container a::before {
+    content: "🔗";
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+}

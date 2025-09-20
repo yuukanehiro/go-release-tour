@@ -242,6 +242,20 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
                             </div>
                         </div>
                         <div id="lesson-description"></div>
+                        <div id="lesson-links" style="display: none;">
+                            <h4>参考リンク</h4>
+                            <div class="links-container">
+                                <a id="release-notes-link" href="#" target="_blank" rel="noopener noreferrer">
+                                    Go Release Notes
+                                </a>
+                                <a id="go-doc-link" href="#" target="_blank" rel="noopener noreferrer" style="display: none;">
+                                    Go Documentation
+                                </a>
+                                <a id="proposal-link" href="#" target="_blank" rel="noopener noreferrer" style="display: none;">
+                                    Go Proposal
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

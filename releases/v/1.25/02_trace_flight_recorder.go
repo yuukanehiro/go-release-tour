@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.25では、メモリ内でトレースをキャプチャし、重要なセグメントのみを書き出すトレース フライト レコーダー機能が追加されました。
 // これにより、パフォーマンス問題の発生時のみトレースデータを保存できるため、オーバーヘッドを最小限に抑えられます。
+//
+// 参考リンク:
+// - Go 1.25 Release Notes: https://go.dev/doc/go1.25#trace
+// - Trace Package: https://pkg.go.dev/runtime/trace
 
 //go:build ignore
 // +build ignore

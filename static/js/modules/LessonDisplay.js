@@ -21,6 +21,9 @@ class LessonDisplay {
             lessonDescription.innerHTML = `<p>${lesson.description}</p>`;
         }
 
+        // 参考リンクを表示
+        this.displayLessonLinks(lesson);
+
         // レッスンコードを読み込み
         const codeEditor = document.getElementById('code-editor');
         if (codeEditor) {
@@ -102,6 +105,75 @@ class LessonDisplay {
 
         this.showLessonContent(lesson);
         this.tour.loadCodeIntoEditor(lesson);
+    }
+
+    displayLessonLinks(lesson) {
+        const linksContainer = document.getElementById('lesson-links');
+        const releaseNotesLink = document.getElementById('release-notes-link');
+        const goDocLink = document.getElementById('go-doc-link');
+        const proposalLink = document.getElementById('proposal-link');
+
+        if (!linksContainer) return;
+
+        // コードからリンク情報を抽出
+        const links = this.extractLinksFromCode(lesson);
+
+        if (links.releaseNotes) {
+            releaseNotesLink.href = links.releaseNotes;
+            releaseNotesLink.style.display = 'inline-flex';
+        } else {
+            // デフォルトのリリースノートリンク
+            releaseNotesLink.href = `https://go.dev/doc/go${lesson.version}`;
+            releaseNotesLink.style.display = 'inline-flex';
+        }
+
+        if (links.goDoc) {
+            goDocLink.href = links.goDoc;
+            goDocLink.style.display = 'inline-flex';
+        } else {
+            goDocLink.style.display = 'none';
+        }
+
+        if (links.proposal) {
+            proposalLink.href = links.proposal;
+            proposalLink.style.display = 'inline-flex';
+        } else {
+            proposalLink.style.display = 'none';
+        }
+
+        linksContainer.style.display = 'block';
+    }
+
+    extractLinksFromCode(lesson) {
+        const links = {
+            releaseNotes: null,
+            goDoc: null,
+            proposal: null
+        };
+
+        if (!lesson.code) return links;
+
+        const lines = lesson.code.split('\n');
+        for (const line of lines) {
+            if (line.includes('Go 1.') && line.includes('Release Notes:')) {
+                const urlMatch = line.match(/https:\/\/[^\s]+/);
+                if (urlMatch) {
+                    links.releaseNotes = urlMatch[0];
+                }
+            } else if (line.includes('Package:') || line.includes('Documentation:')) {
+                const urlMatch = line.match(/https:\/\/pkg\.go\.dev\/[^\s]+/);
+                if (urlMatch) {
+                    links.goDoc = urlMatch[0];
+                }
+            } else if (line.includes('Proposal:')) {
+                const urlMatch = line.match(/https:\/\/[^\s]+/);
+                if (urlMatch) {
+                    links.proposal = urlMatch[0];
+                }
+            }
+        }
+
+        return links;
     }
 }
 

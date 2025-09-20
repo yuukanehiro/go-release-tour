@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.23では、slices.Concat関数が追加され、
 // 複数のスライスを効率的に連結できるようになりました。
+//
+// 参考リンク:
+// - Go 1.23 Release Notes: https://go.dev/doc/go1.23#slices
+// - slices Package: https://pkg.go.dev/slices
 
 //go:build ignore
 // +build ignore

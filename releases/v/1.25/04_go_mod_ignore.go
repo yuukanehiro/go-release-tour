@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.25では、go.modファイルで特定のモジュールを無視するignoreディレクティブが追加されました。
 // これにより、セキュリティ上の問題があるモジュールや使用したくないモジュールを明示的に除外できます。
+//
+// 参考リンク:
+// - Go 1.25 Release Notes: https://go.dev/doc/go1.25#go-mod
+// - Go Modules Reference: https://go.dev/ref/mod
 
 //go:build ignore
 // +build ignore

@@ -2,6 +2,10 @@
 // 原文: "Go 1.24 now fully supports generic type aliases: a type alias may be parameterized like a defined type"
 //
 // 説明: Go 1.24では、型エイリアスがジェネリクス対応となり、パラメータ化された型エイリアスが作成できるようになりました。
+//
+// 参考リンク:
+// - Go 1.24 Release Notes: https://go.dev/doc/go1.24#type-aliases
+// - Go Language Specification: https://go.dev/ref/spec#Type_declarations
 
 //go:build ignore
 // +build ignore

@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.19では、sync/atomicパッケージに新しいアトミック型が追加され、
 // より安全で使いやすい並行プログラミングが可能になりました。
+//
+// 参考リンク:
+// - Go 1.19 Release Notes: https://go.dev/doc/go1.19#atomic
+// - sync/atomic Package: https://pkg.go.dev/sync/atomic
 
 //go:build ignore
 // +build ignore

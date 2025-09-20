@@ -2,6 +2,10 @@
 // 原文: "New map implementation based on Swiss Tables, more efficient memory allocation"
 //
 // 説明: Swiss Tablesベースの新しいマップ実装により、大きなマップ（>1024エントリ）で約30%の性能向上を実現。
+//
+// 参考リンク:
+// - Go 1.24 Release Notes: https://go.dev/doc/go1.24#maps
+// - Swiss Tables Paper: https://abseil.io/about/design/swisstables
 
 //go:build ignore
 // +build ignore

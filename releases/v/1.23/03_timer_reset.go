@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.23では、Timer.Reset()の動作が改善され、
 // 期限切れタイマーが自動的にドレインされ、goroutineリークの一般的な原因が修正されました。
+//
+// 参考リンク:
+// - Go 1.23 Release Notes: https://go.dev/doc/go1.23#timer
+// - time Package: https://pkg.go.dev/time
 
 //go:build ignore
 // +build ignore

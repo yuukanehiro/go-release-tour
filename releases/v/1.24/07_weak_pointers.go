@@ -2,6 +2,10 @@
 // 原文: "New weak package provides weak pointers implementation"
 //
 // 説明: 新しいweakパッケージにより、弱参照（weak reference）が実装され、循環参照によるメモリリークを防げます。
+//
+// 参考リンク:
+// - Go 1.24 Release Notes: https://go.dev/doc/go1.24#weak
+// - weak Package: https://pkg.go.dev/weak
 
 //go:build ignore
 // +build ignore

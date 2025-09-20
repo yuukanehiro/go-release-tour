@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.23では、maps.Collect関数が追加され、
 // イテレーター関数から効率的にマップを作成できるようになりました。
+//
+// 参考リンク:
+// - Go 1.23 Release Notes: https://go.dev/doc/go1.23#maps
+// - maps Package: https://pkg.go.dev/maps
 
 //go:build ignore
 // +build ignore

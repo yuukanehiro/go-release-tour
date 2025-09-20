@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.18では、ワークスペースモードが追加され、
 // 複数のモジュールを同時に開発できるようになりました。
+//
+// 参考リンク:
+// - Go 1.18 Release Notes: https://go.dev/doc/go1.18#workspace
+// - Go Modules Reference: https://go.dev/ref/mod#workspaces
 
 //go:build ignore
 // +build ignore

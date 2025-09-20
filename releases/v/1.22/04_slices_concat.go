@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.22では、slicesパッケージに多くの便利な関数が追加され、
 // スライス操作がより効率的になりました。
+//
+// 参考リンク:
+// - Go 1.22 Release Notes: https://go.dev/doc/go1.22#slices
+// - slices Package: https://pkg.go.dev/slices
 
 //go:build ignore
 // +build ignore

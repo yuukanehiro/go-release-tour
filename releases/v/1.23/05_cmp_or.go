@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.23では、cmp.Or関数が追加され、
 // 引数から最初の非ゼロ値を返すことでデフォルト値の設定が簡単になりました。
+//
+// 参考リンク:
+// - Go 1.23 Release Notes: https://go.dev/doc/go1.23#cmp
+// - cmp Package: https://pkg.go.dev/cmp
 
 //go:build ignore
 // +build ignore

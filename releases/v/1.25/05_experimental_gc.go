@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.25では、Green Tea GCと呼ばれる実験的なガベージコレクターが利用可能になりました。
 // このGCは10-40%のガベージコレクションオーバーヘッド削減の可能性があります。
+//
+// 参考リンク:
+// - Go 1.25 Release Notes: https://go.dev/doc/go1.25#gc
+// - Runtime Package: https://pkg.go.dev/runtime
 
 // +build ignore
 

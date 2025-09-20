@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.20では、ジェネリクスのcomparable制約が改善され、
 // より柔軟な型パラメーターが使用できるようになりました。
+//
+// 参考リンク:
+// - Go 1.20 Release Notes: https://go.dev/doc/go1.20#language
+// - Go Language Specification: https://go.dev/ref/spec#Type_constraints
 
 //go:build ignore
 // +build ignore

@@ -4,6 +4,10 @@
 // 説明: Go 1.23では、関数型に対するrange構文が追加され、
 // カスタムイテレーターの実装が可能になりました。
 //
+// 参考リンク:
+// - Go 1.23 Release Notes: https://go.dev/doc/go1.23#iterators
+// - iter Package: https://pkg.go.dev/iter
+//
 // 注意: この例はイテレーターの概念を示すもので、実際の環境では従来の反復処理を使用しています。
 
 //go:build ignore

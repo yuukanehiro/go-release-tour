@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.22では、for-rangeループで直接整数をイテレートできるようになり、
 // 従来のC風のループがより簡潔に書けるようになりました。
+//
+// 参考リンク:
+// - Go 1.22 Release Notes: https://go.dev/doc/go1.22#language
+// - Go Language Specification: https://go.dev/ref/spec#For_range
 
 //go:build ignore
 // +build ignore

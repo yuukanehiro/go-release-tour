@@ -1,4 +1,11 @@
+// Go 1.18 新機能: Type Constraints
+// 原文: "Type constraints for generics"
+//
 // 説明: Type Constraints - ジェネリクスで型を制約する方法を学ぶ
+//
+// 参考リンク:
+// - Go 1.18 Release Notes: https://go.dev/doc/go1.18#generics
+// - Go Language Specification: https://go.dev/ref/spec#Type_constraints
 
 //go:build ignore
 // +build ignore

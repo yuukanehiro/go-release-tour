@@ -4,6 +4,10 @@
 // 説明: Go 1.21でlog/slogパッケージが追加され、Go 1.23でさらに改良されました。
 // 構造化ログ、ログレベル、コンテキスト対応の高度なロギング機能を提供します。
 //
+// 参考リンク:
+// - Go 1.23 Release Notes: https://go.dev/doc/go1.23#log-slog
+// - log/slog Package: https://pkg.go.dev/log/slog
+//
 // 注意: この例は log/slog の概念を示すもので、実際の環境では標準のlogパッケージを使用しています。
 
 //go:build ignore

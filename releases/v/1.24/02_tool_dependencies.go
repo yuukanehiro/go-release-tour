@@ -2,6 +2,10 @@
 // 原文: "Go modules can now track executable dependencies using tool directives in go.mod"
 //
 // 説明: go.modファイルで実行可能ツールの依存関係を追跡できるようになり、tools.goファイルが不要になりました。
+//
+// 参考リンク:
+// - Go 1.24 Release Notes: https://go.dev/doc/go1.24#go-command
+// - Go Modules Reference: https://go.dev/ref/mod
 
 //go:build ignore
 // +build ignore

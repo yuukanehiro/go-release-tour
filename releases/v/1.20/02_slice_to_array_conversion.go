@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.20では、スライスから配列への直接変換が可能になり、
 // より安全で読みやすいコードが書けるようになりました。
+//
+// 参考リンク:
+// - Go 1.20 Release Notes: https://go.dev/doc/go1.20#language
+// - Go Language Specification: https://go.dev/ref/spec#Conversions
 
 //go:build ignore
 // +build ignore

@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.22では、改良されたAPIとより良い乱数生成アルゴリズムを持つ
 // math/rand/v2パッケージが追加されました。
+//
+// 参考リンク:
+// - Go 1.22 Release Notes: https://go.dev/doc/go1.22#math-rand-v2
+// - math/rand/v2 Package: https://pkg.go.dev/math/rand/v2
 
 //go:build ignore
 // +build ignore

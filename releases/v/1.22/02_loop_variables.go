@@ -3,6 +3,10 @@
 //
 // 説明: Go 1.22では、forループ内のクロージャーで変数が正しくキャプチャされるようになり、
 // 長年の混乱の原因となっていた問題が解決されました。
+//
+// 参考リンク:
+// - Go 1.22 Release Notes: https://go.dev/doc/go1.22#language
+// - Go FAQ: https://go.dev/doc/faq#closures_and_goroutines
 
 //go:build ignore
 // +build ignore
