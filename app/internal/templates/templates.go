@@ -13,6 +13,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Go Release Tour - Go新機能学習</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <link rel="stylesheet" href="/static/style.css">
     <!-- CodeMirror CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
@@ -26,7 +27,9 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 <body>
     <div id="app">
         <header>
-            <h1 class="clickable-title" id="home-btn">🚀 Go Release Tour</h1>
+            <div class="header-logo clickable-title" id="home-btn">
+                <img src="/static/header-logo.png" alt="Go Release Tour" class="logo-image">
+            </div>
             <p>Goの新機能をインタラクティブに学習しよう</p>
         </header>
 

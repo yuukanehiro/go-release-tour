@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="static/header-logo.png" alt="Go Release Tour" width="300">
+</div>
+
 # Go Release Tour
 
 **Go 1.25の新機能をインタラクティブに学習できるWebアプリケーション**

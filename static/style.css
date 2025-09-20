@@ -17,13 +17,28 @@ header {
     color: white;
     padding: 2rem 0;
     text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
     font-weight: 300;
+}
+
+.header-logo {
+    margin-bottom: 0.5rem;
+}
+
+.logo-image {
+    max-height: 150px;
+    height: 150px;
+    width: auto;
+    transition: transform 0.2s ease;
+}
+
+.logo-image:hover {
+    transform: scale(1.05);
 }
 
 .clickable-title {
@@ -57,18 +72,18 @@ header p {
 
 .version-tab {
     padding: 0.5rem 1rem;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     color: white;
     text-decoration: none;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 500;
     transition: all 0.3s ease;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .version-tab:hover {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255, 255, 255, 0.3);
     transform: translateY(-1px);
 }
 
@@ -125,7 +140,7 @@ header p {
 #version-select:focus {
     outline: none;
     border-color: #00ADD8;
-    box-shadow: 0 0 0 2px rgba(0,173,216,0.2);
+    box-shadow: 0 0 0 2px rgba(0, 173, 216, 0.2);
 }
 
 .version-info {
@@ -172,7 +187,7 @@ header p {
     background: #e3f2fd;
     border-color: #00ADD8;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,173,216,0.15);
+    box-shadow: 0 4px 12px rgba(0, 173, 216, 0.15);
 }
 
 .lesson-item.active {
@@ -194,7 +209,7 @@ header p {
 }
 
 .lesson-item.active .lesson-description {
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .lesson-stars {
@@ -219,7 +234,7 @@ header p {
     background: white;
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     border: 1px solid #e9ecef;
 }
 
@@ -239,7 +254,7 @@ header p {
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     border: 1px solid #e9ecef;
 }
 
@@ -385,7 +400,7 @@ header p {
 #run-btn:hover {
     background: #218838;
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(40,167,69,0.3);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
 #run-btn:disabled {
@@ -418,7 +433,7 @@ header p {
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     border: 1px solid #e9ecef;
 }
 
@@ -493,7 +508,7 @@ header p {
     background: white;
     border-radius: 12px;
     padding: 2rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     border: 2px solid transparent;
     cursor: pointer;
@@ -501,7 +516,7 @@ header p {
 
 .version-card.clickable:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     border-color: #00ADD8;
 }
 
@@ -545,8 +560,13 @@ header p {
 }
 
 @keyframes glow {
-    from { box-shadow: 0 0 5px rgba(255, 107, 107, 0.5); }
-    to { box-shadow: 0 0 15px rgba(255, 107, 107, 0.8); }
+    from {
+        box-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+    }
+
+    to {
+        box-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+    }
 }
 
 .version-features {
@@ -612,7 +632,7 @@ header p {
     border-radius: 12px;
     padding: 2rem;
     margin-top: 3rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .tour-info h3 {
@@ -671,20 +691,32 @@ header p {
 }
 
 /* Syntax highlighting for better code readability */
-.keyword { color: #0066cc; }
-.string { color: #009900; }
-.comment { color: #999999; font-style: italic; }
-.number { color: #cc6600; }
+.keyword {
+    color: #0066cc;
+}
+
+.string {
+    color: #009900;
+}
+
+.comment {
+    color: #999999;
+    font-style: italic;
+}
+
+.number {
+    color: #cc6600;
+}
 
 /* Welcome screen specific styles */
-#welcome-screen ~ .code-section,
-#welcome-screen ~ .output-section {
+#welcome-screen~.code-section,
+#welcome-screen~.output-section {
     display: none;
 }
 
 /* Show code section and output section when lesson view is active */
-#lesson-view:not([style*="display: none"]) ~ .code-section,
-#lesson-view:not([style*="display: none"]) ~ .output-section {
+#lesson-view:not([style*="display: none"])~.code-section,
+#lesson-view:not([style*="display: none"])~.output-section {
     display: block;
 }
 
