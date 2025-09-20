@@ -1,0 +1,28 @@
+# Production Docker Compose for Go Release Tour
+
+services:
+  go-release-tour:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: go-release-tour
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - GO_ENV=production
+    volumes:
+      - ./releases:/app/releases:ro
+      - ./static:/app/static:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - go-tour-network
+
+networks:
+  go-tour-network:
+    driver: bridge

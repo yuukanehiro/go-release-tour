@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+*.md
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+
+# Go
+*.test
+*.out
+coverage.txt
+
+# Air
+build-errors.log
+
+# Node modules (if any)
+node_modules
+
+# Environment
+.env
+.env.local
