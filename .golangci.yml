@@ -1,0 +1,85 @@
+run:
+  timeout: 5m
+  issues-exit-code: 1
+  tests: true
+
+linters:
+  enable:
+    - gofmt
+    - gofumpt
+    - goimports
+    - govet
+    - ineffassign
+    - misspell
+    - revive
+    - staticcheck
+    - typecheck
+    - unused
+    - errcheck
+    - gosimple
+    - goconst
+    - unconvert
+    - gosec
+    - gocyclo
+    - dupl
+    - gocritic
+    - whitespace
+    - wsl
+    - nolintlint
+
+linters-settings:
+  gofmt:
+    simplify: true
+  gofumpt:
+    extra-rules: true
+  goimports:
+    local-prefixes: go-release-tour
+  revive:
+    rules:
+      - name: exported
+        arguments: [checkPrivateReceivers, sayRepetitiveInsteadOfStutters]
+  govet:
+    check-shadowing: true
+  gocyclo:
+    min-complexity: 15
+  dupl:
+    threshold: 100
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+  gosec:
+    severity: medium
+    confidence: medium
+
+issues:
+  exclude-rules:
+    # Exclude some linters from running on tests files
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+
+    # Exclude known false positives
+    - text: "weak cryptographic primitive"
+      linters:
+        - gosec
+
+    # Ignore magic numbers in tests
+    - path: _test\.go
+      text: "Magic number"
+      linters:
+        - goconst
+
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
