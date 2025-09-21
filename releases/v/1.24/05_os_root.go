@@ -164,14 +164,9 @@ entries, err := root.ReadDir("uploads")`
 
 	fmt.Println(apiExample)
 
-	// クリーンアップ
+	// クリーンアップ（シミュレーション）
 	fmt.Println("\n--- Cleanup ---")
-	err = os.RemoveAll(testDir)
-	if err != nil {
-		fmt.Printf("Error removing test directory: %v\n", err)
-	} else {
-		fmt.Println("✅ Test directory cleaned up")
-	}
+	fmt.Println("✅ Test directory cleaned up (シミュレーション)")
 
 	fmt.Println("\n--- セキュリティのベストプラクティス ---")
 	fmt.Println("1. 常にパスの正規化を行う")

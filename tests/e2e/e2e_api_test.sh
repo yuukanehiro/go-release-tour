@@ -7,7 +7,11 @@ set -e
 
 BASE_URL="http://localhost:8080"
 TEST_DIR=$(dirname "$0")
-RESULTS_FILE="$TEST_DIR/e2e_test_results.json"
+RESULTS_DIR="$(dirname "$TEST_DIR")/results"
+RESULTS_FILE="$RESULTS_DIR/e2e_test_results.json"
+
+# 結果ディレクトリの作成
+mkdir -p "$RESULTS_DIR"
 
 echo "Go Release Tour E2E API Tests Starting..."
 echo "Base URL: $BASE_URL"

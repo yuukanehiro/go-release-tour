@@ -146,15 +146,15 @@ func main() {
 	fmt.Println("\n--- 型安全性の利点 ---")
 
 	// コンパイル時エラーの例（実際にはコメントアウト）
-	// var unsafeCounter int64
-	// counter.Store(unsafeCounter) // コンパイルエラー: 型が一致しない
+	// var regularCounter int64
+	// counter.Store(regularCounter) // コンパイルエラー: 型が一致しない
 
 	fmt.Println("新しいアトミック型の利点:")
 	fmt.Println("  - 型安全性: 間違った型での操作を防止")
 	fmt.Println("  - アクセス制御: 非アトミックアクセスを防止")
 	fmt.Println("  - 使いやすさ: メソッド形式で直感的")
 	fmt.Println("  - アライメント: 自動的に適切にアライメント")
-	fmt.Println("  - ポインター安全性: unsafe.Pointerが不要")
+	fmt.Println("  - ポインター安全性: 低レベルポインター操作が不要")
 
 	fmt.Println("\n--- パフォーマンス比較デモ ---")
 

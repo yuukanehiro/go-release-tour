@@ -16,7 +16,6 @@ package main
 
 import (
 	"fmt"
-	"os/exec"
 	"time"
 )
 
@@ -98,31 +97,16 @@ func demonstrateGoDocCommands() {
 }
 
 func tryGoDocCommand() {
-	fmt.Println("\n実際のgo docコマンド実行例...")
+	fmt.Println("\ngo docコマンドの使用例...")
 
-	// go version を確認
-	cmd := exec.Command("go", "version")
-	output, err := cmd.Output()
-	if err != nil {
-		fmt.Printf("Goが見つかりません: %v\n", err)
-		return
-	}
+	fmt.Println("現在のGo version: go1.25 (demo)")
 
-	fmt.Printf("現在のGo version: %s", string(output))
-
-	// go doc の基本的な使い方を示す
-	fmt.Println("\n基本的なgo docコマンド（-httpなし）:")
-
-	// 標準ライブラリのドキュメントを表示
-	cmd = exec.Command("go", "doc", "fmt.Println")
-	output, err = cmd.Output()
-	if err != nil {
-		fmt.Printf("go docコマンドエラー: %v\n", err)
-		return
-	}
-
-	fmt.Println("--- fmt.Printlnのドキュメント ---")
-	fmt.Println(string(output))
+	fmt.Println("\n--- fmt.Printlnのドキュメント例 ---")
+	fmt.Println("func Println(a ...any) (n int, err error)")
+	fmt.Println("Println formats using the default formats for its operands and writes to")
+	fmt.Println("standard output. Spaces are always added between operands and a newline")
+	fmt.Println("is appended. It returns the number of bytes written and any write error")
+	fmt.Println("encountered.")
 
 	fmt.Println("\n--- Go 1.25での新しい使い方 ---")
 	fmt.Println("以下のコマンドでWebサーバーとして起動:")

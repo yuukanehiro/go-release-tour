@@ -17,7 +17,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
 func main() {
@@ -25,8 +24,8 @@ func main() {
 
 	fmt.Println("Go 1.25で追加されたgo.modのignoreディレクティブ")
 
-	// サンプルのgo.modファイルを作成
-	createSampleGoMod()
+	// サンプルのgo.modファイル内容を表示
+	displaySampleGoMod()
 
 	fmt.Println("\n--- ignoreディレクティブの特徴 ---")
 	fmt.Println("1. セキュリティリスクのあるモジュール除外")
@@ -40,9 +39,6 @@ func main() {
 	fmt.Println("\n3. 依存関係の制御")
 	fmt.Println("   - 間接依存関係での問題パッケージを除外")
 	fmt.Println("   - チーム開発での統一されたパッケージ管理")
-
-	fmt.Println("\n--- 使用例 ---")
-	readAndDisplayGoMod()
 
 	fmt.Println("\n--- 実用的な使用ケース ---")
 	fmt.Println("1. セキュリティ対策:")
@@ -62,11 +58,11 @@ func main() {
 	fmt.Println("- go mod tidy: ignoreされたパッケージは除外される")
 	fmt.Println("- go build: ignoreされたパッケージがあるとエラー")
 
-	cleanup()
 }
 
-func createSampleGoMod() {
-	fmt.Println("\nサンプルgo.modファイルを作成...")
+func displaySampleGoMod() {
+	fmt.Println("\n--- サンプルgo.modファイルの例 ---")
+	fmt.Println("=====================================")
 
 	goModContent := `module example.com/my-project
 
@@ -92,39 +88,10 @@ ignore example.com/deprecated-library
 ignore (
     example.com/gpl-package
     example.com/commercial-only
-)
-`
+)`
 
-	err := os.WriteFile("sample-go.mod", []byte(goModContent), 0644)
-	if err != nil {
-		fmt.Printf("エラー: %v\n", err)
-		return
-	}
-
-	fmt.Println("サンプルgo.modファイルを作成しました")
-}
-
-func readAndDisplayGoMod() {
-	fmt.Println("作成されたgo.modファイルの内容:")
+	fmt.Println(goModContent)
 	fmt.Println("=====================================")
-
-	content, err := os.ReadFile("sample-go.mod")
-	if err != nil {
-		fmt.Printf("エラー: %v\n", err)
-		return
-	}
-
-	fmt.Println(string(content))
-	fmt.Println("=====================================")
-}
-
-func cleanup() {
-	fmt.Println("\nクリーンアップ...")
-	if err := os.Remove("sample-go.mod"); err != nil {
-		fmt.Printf("クリーンアップエラー: %v\n", err)
-	} else {
-		fmt.Println("サンプルファイルを削除しました")
-	}
 }
 
 // % go run 04_go_mod_ignore.go

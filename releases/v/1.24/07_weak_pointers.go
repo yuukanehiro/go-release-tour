@@ -16,7 +16,6 @@ import (
 	"fmt"
 	"runtime"
 	"time"
-	"unsafe"
 )
 
 // =============================================================================
@@ -26,19 +25,15 @@ import (
 // WeakRef - ジェネリック弱参照型
 // 注意: これは概念説明用の疑似実装です。実際のAPIは異なる可能性があります。
 type WeakRef[T any] struct {
-	ptr *T      // オブジェクトへのポインタ
-	id  uintptr // オブジェクトのアドレス（識別用）
+	ptr   *T    // オブジェクトへのポインタ
+	valid bool  // 参照が有効かどうか
 }
 
 // NewWeakRef - 弱参照を作成
 func NewWeakRef[T any](obj *T) *WeakRef[T] {
-	var id uintptr
-	if obj != nil {
-		id = uintptr(unsafe.Pointer(obj))
-	}
 	return &WeakRef[T]{
-		ptr: obj,
-		id:  id,
+		ptr:   obj,
+		valid: obj != nil,
 	}
 }
 

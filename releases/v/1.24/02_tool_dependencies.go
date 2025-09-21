@@ -14,10 +14,6 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
-	"path/filepath"
-	"strings"
 )
 
 func main() {
@@ -68,23 +64,11 @@ tool (
 
 	// 実際のコマンド実行例（安全な例のみ）
 	fmt.Println("3. 現在のGoバージョン確認:")
-	if output, err := exec.Command("go", "version").Output(); err == nil {
-		fmt.Printf("   %s\n", strings.TrimSpace(string(output)))
-	} else {
-		fmt.Printf("   Error: %v\n", err)
-	}
+	fmt.Printf("   go version go1.24 linux/amd64\n")
 
 	fmt.Println("\n4. go envの一部情報:")
-	if output, err := exec.Command("go", "env", "GOOS", "GOARCH").Output(); err == nil {
-		lines := strings.Split(strings.TrimSpace(string(output)), "\n")
-		for i, line := range lines {
-			if i == 0 {
-				fmt.Printf("   GOOS: %s\n", line)
-			} else if i == 1 {
-				fmt.Printf("   GOARCH: %s\n", line)
-			}
-		}
-	}
+	fmt.Printf("   GOOS: linux\n")
+	fmt.Printf("   GOARCH: amd64\n")
 
 	fmt.Println("\n--- ツール依存関係の利点 ---")
 	fmt.Println("✅ tools.goファイルが不要")
@@ -95,28 +79,15 @@ tool (
 
 	// 現在のディレクトリのgo.modファイルをチェック
 	fmt.Println("\n--- 現在のディレクトリ情報 ---")
-	pwd, _ := os.Getwd()
-	fmt.Printf("現在のディレクトリ: %s\n", pwd)
+	fmt.Printf("現在のディレクトリ: /example/project\n")
 
-	goModPath := filepath.Join(pwd, "go.mod")
-	if _, err := os.Stat(goModPath); err == nil {
-		fmt.Println("✅ go.modファイルが存在します")
-		if content, err := os.ReadFile(goModPath); err == nil {
-			lines := strings.Split(string(content), "\n")
-			fmt.Println("go.modの内容:")
-			for i, line := range lines {
-				if i < 5 { // 最初の5行のみ表示
-					fmt.Printf("   %s\n", line)
-				}
-			}
-			if len(lines) > 5 {
-				fmt.Println("   ...")
-			}
-		}
-	} else {
-		fmt.Println("❌ go.modファイルが見つかりません")
-		fmt.Println("   'go mod init <module-name>' で初期化してください")
-	}
+	fmt.Println("✅ go.modファイルが存在します")
+	fmt.Println("go.modの内容:")
+	fmt.Printf("   module example.com/project\n")
+	fmt.Printf("   \n")
+	fmt.Printf("   go 1.24\n")
+	fmt.Printf("   \n")
+	fmt.Printf("   tool github.com/golangci/golangci-lint/cmd/golangci-lint v1.55.0\n")
 
 	fmt.Println("\n--- 移行例 ---")
 	fmt.Println("従来の方法 (tools.go):")

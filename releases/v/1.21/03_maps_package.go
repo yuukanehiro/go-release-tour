@@ -30,12 +30,18 @@ func main() {
 	// 比較
 	fmt.Printf("等しい: %v\n", maps.Equal(m1, m2))
 
-	// キーの取得
-	keys := maps.Keys(m1)
+	// キーの取得（Go 1.21では手動実装）
+	var keys []string
+	for k := range m1 {
+		keys = append(keys, k)
+	}
 	fmt.Printf("キー: %v\n", keys)
 
-	// 値の取得
-	values := maps.Values(m1)
+	// 値の取得（Go 1.21では手動実装）
+	var values []int
+	for _, v := range m1 {
+		values = append(values, v)
+	}
 	fmt.Printf("値: %v\n", values)
 
 	// マージ
