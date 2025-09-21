@@ -166,7 +166,7 @@ make drop
 
 ## アーキテクチャ
 
-```
+
 go-release-tour/
 ├── Makefile                     # Make コマンド定義
 ├── docker-compose.yml           # Docker Compose設定
@@ -199,7 +199,7 @@ go-release-tour/
     ├── e2e/                    # E2Eテスト
     ├── integration/            # 統合テスト
     └── results/                # テスト結果（gitignore対象）
-```
+
 
 ### バックエンド（Go）
 - **マルチバージョン実行**: Docker内の複数Goバージョンでコード実行
