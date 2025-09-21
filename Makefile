@@ -19,6 +19,7 @@ help:
 	@echo ""
 	@echo "Testing:"
 	@echo "  make test        - Run all tests (E2E, integration)"
+	@echo "  make test-verbose - Run all tests with verbose output"
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean       - Clean Docker artifacts only"
@@ -81,9 +82,24 @@ test:
 	@echo "Running E2E API tests..."
 	@chmod +x tests/e2e/e2e_api_test.sh
 	@./tests/e2e/e2e_api_test.sh || echo "E2E API tests completed with issues"
-	@echo "Running integration tests..."
+	@echo "Running integration tests (Go version)..."
 	@chmod +x tests/integration/test_all_lessons.sh
 	@./tests/integration/test_all_lessons.sh || echo "Integration tests completed with issues"
+	@echo "Test results saved in tests/results/"
+	@echo "All tests completed!"
+
+# Testing with verbose output
+test-verbose:
+	@echo "Running all tests (verbose mode)..."
+	@echo "Starting application for testing..."
+	@$(MAKE) app
+	@sleep 5
+	@echo "Running E2E API tests..."
+	@chmod +x tests/e2e/e2e_api_test.sh
+	@./tests/e2e/e2e_api_test.sh || echo "E2E API tests completed with issues"
+	@echo "Running integration tests (verbose mode)..."
+	@chmod +x tests/integration/test_all_lessons.sh
+	@VERBOSE=true ./tests/integration/test_all_lessons.sh || echo "Integration tests completed with issues"
 	@echo "Test results saved in tests/results/"
 	@echo "All tests completed!"
 
