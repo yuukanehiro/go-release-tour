@@ -137,7 +137,7 @@ func tryGoDocCommand() {
 		fmt.Printf("Server starting... %d/3\n", i)
 		time.Sleep(500 * time.Millisecond)
 	}
-	fmt.Println("📖 ドキュメントサーバーが起動しました (シミュレーション)")
-	fmt.Println("🌐 ブラウザでアクセス: http://localhost:8080")
-	fmt.Println("⏹️  停止するには Ctrl+C を押してください")
+	fmt.Println("ドキュメントサーバーが起動しました (シミュレーション)")
+	fmt.Println("ブラウザでアクセス: http://localhost:8080")
+	fmt.Println("停止するには Ctrl+C を押してください")
 }

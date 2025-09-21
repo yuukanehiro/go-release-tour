@@ -1,0 +1,69 @@
+{
+  "test_run": "2025-09-21T19:48:49+09:00",
+  "tests": [
+    {
+      "name": "Basic Hello World",
+      "version": "1.25",
+      "status": "PASSED",
+      "execution_time": "0s",
+      "error": "",
+      "timestamp": "2025-09-21T10:48:49Z"
+    },
+    {
+      "name": "Generic Type Aliases",
+      "version": "1.24",
+      "status": "PASSED",
+      "execution_time": "0s",
+      "error": "",
+      "timestamp": "2025-09-21T10:48:49Z"
+    },
+    {
+      "name": "Structured Logging Concept",
+      "version": "1.23",
+      "status": "PASSED",
+      "execution_time": "1.00s",
+      "error": "",
+      "timestamp": "2025-09-21T10:48:50Z"
+    },
+    {
+      "name": "For-Range over Integers",
+      "version": "1.22",
+      "status": "PASSED",
+      "execution_time": "0s",
+      "error": "",
+      "timestamp": "2025-09-21T10:48:50Z"
+    },
+    {
+      "name": "Slices Package",
+      "version": "1.21",
+      "status": "PASSED",
+      "execution_time": "0s",
+      "error": "",
+      "timestamp": "2025-09-21T10:48:50Z"
+    },
+    {
+      "name": "Basic Go 1.20",
+      "version": "1.20",
+      "status": "PASSED",
+      "execution_time": "2.00s",
+      "error": "",
+      "timestamp": "2025-09-21T10:48:52Z"
+    },
+    {
+      "name": "Basic Go 1.19",
+      "version": "1.19",
+      "status": "PASSED",
+      "execution_time": "0s",
+      "error": "",
+      "timestamp": "2025-09-21T10:48:52Z"
+    },
+    {
+      "name": "Invalid Version",
+      "version": "999.999",
+      "status": "FAILED",
+      "execution_time": "0s",
+      "error": "サポートされていないGoバージョン: 999.999; バージョン設定エラー: サポートされていないGoバージョン: 999.999",
+      "timestamp": "2025-09-21T10:48:52Z"
+    }
+  ]
+}

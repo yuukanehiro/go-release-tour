@@ -28,6 +28,8 @@ class EditorManager {
                 autoCloseBrackets: true,
                 matchBrackets: true,
                 viewportMargin: Infinity,
+                scrollbarStyle: "null",
+                lineWrapping: true,
                 extraKeys: {
                     'Ctrl-Enter': () => this.tour.runCode(),
                     'Cmd-Enter': () => this.tour.runCode(),
@@ -53,6 +55,12 @@ class EditorManager {
 
             // テーマセレクターの初期化
             this.setupThemeSelector();
+
+            // エディターをリフレッシュして全コンテンツを表示
+            setTimeout(() => {
+                this.tour.codeEditor.refresh();
+                this.tour.codeEditor.setSize(null, "auto");
+            }, 100);
 
             console.log('CodeMirror editor initialized successfully');
         } catch (error) {

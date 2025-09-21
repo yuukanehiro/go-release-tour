@@ -1,0 +1,204 @@
+{
+  "versions": {
+    "1.25": {
+      "full_version": "1.25.1",
+      "path": "/opt/go1.25/bin/go",
+      "lessons": {
+        "01_container_aware_gomaxprocs.go": {
+          "title": "Container-aware GOMAXPROCS",
+          "stars": 5
+        },
+        "02_trace_flight_recorder.go": {
+          "title": "Trace Flight Recorder",
+          "stars": 4
+        },
+        "03_testing_synctest.go": {
+          "title": "testing/synctest Package",
+          "stars": 5
+        },
+        "04_go_mod_ignore.go": {
+          "title": "go.mod ignore Directive",
+          "stars": 3
+        },
+        "05_experimental_gc.go": {
+          "title": "Experimental Green Tea GC",
+          "stars": 3
+        },
+        "06_json_v2.go": {
+          "title": "encoding/json/v2 Package",
+          "stars": 4
+        },
+        "07_go_doc_http.go": {
+          "title": "go doc -http Option",
+          "stars": 3
+        }
+      }
+    },
+    "1.24": {
+      "full_version": "1.24.0",
+      "path": "/opt/go1.24/bin/go",
+      "lessons": {
+        "01_generic_type_aliases.go": {
+          "title": "Generic Type Aliases",
+          "stars": 5
+        },
+        "02_tool_dependencies.go": {
+          "title": "Tool Dependencies in go.mod",
+          "stars": 5
+        },
+        "03_swiss_tables_maps.go": {
+          "title": "Swiss Tables Map Implementation",
+          "stars": 5
+        },
+        "04_testing_loop.go": {
+          "title": "testing.B.Loop() Method",
+          "stars": 4
+        },
+        "05_os_root.go": {
+          "title": "os.Root Type",
+          "stars": 4
+        },
+        "06_crypto_mlkem.go": {
+          "title": "crypto/mlkem Package",
+          "stars": 5
+        },
+        "07_weak_pointers.go": {
+          "title": "weak Package",
+          "stars": 4
+        }
+      }
+    },
+    "1.23": {
+      "full_version": "1.23.1",
+      "path": "/opt/go1.23/bin/go",
+      "lessons": {
+        "01_structured_logging.go": {
+          "title": "Structured Logging (log/slog)",
+          "stars": 5
+        },
+        "02_iterators.go": {
+          "title": "Range over Function Types",
+          "stars": 5
+        },
+        "03_timer_reset.go": {
+          "title": "Timer.Reset Behavior Change",
+          "stars": 4
+        },
+        "04_slices_concat.go": {
+          "title": "slices.Concat Function",
+          "stars": 4
+        },
+        "05_cmp_or.go": {
+          "title": "cmp.Or Function",
+          "stars": 3
+        },
+        "06_maps_collect.go": {
+          "title": "maps.Collect Function",
+          "stars": 4
+        }
+      }
+    },
+    "1.22": {
+      "full_version": "1.22.7",
+      "path": "/opt/go1.22/bin/go",
+      "lessons": {
+        "01_for_range_integers.go": {
+          "title": "For-Range over Integers",
+          "stars": 5
+        },
+        "02_loop_variables.go": {
+          "title": "Enhanced Loop Variables",
+          "stars": 5
+        },
+        "03_math_rand_v2.go": {
+          "title": "math/rand/v2 Package",
+          "stars": 4
+        },
+        "04_slices_concat.go": {
+          "title": "slices Package Enhancements",
+          "stars": 4
+        },
+        "05_enhanced_http_routing.go": {
+          "title": "Enhanced HTTP Routing",
+          "stars": 5
+        }
+      }
+    },
+    "1.21": {
+      "full_version": "1.21.12",
+      "path": "/opt/go1.21/bin/go",
+      "lessons": {
+        "01_built_in_functions.go": {
+          "title": "Built-in Functions (min, max, clear)",
+          "stars": 5
+        },
+        "02_slices_package.go": {
+          "title": "slices Package",
+          "stars": 5
+        },
+        "03_maps_package.go": {
+          "title": "maps Package",
+          "stars": 5
+        }
+      }
+    },
+    "1.20": {
+      "full_version": "1.20.14",
+      "path": "/opt/go1.20/bin/go",
+      "lessons": {
+        "01_comparable_types.go": {
+          "title": "Comparable Types Enhancement",
+          "stars": 4
+        },
+        "02_slice_to_array_conversion.go": {
+          "title": "Slice to Array Conversion",
+          "stars": 4
+        },
+        "03_errors_join.go": {
+          "title": "errors.Join Function",
+          "stars": 4
+        }
+      }
+    },
+    "1.19": {
+      "full_version": "1.19.13",
+      "path": "/opt/go1.19/bin/go",
+      "lessons": {
+        "01_memory_arenas.go": {
+          "title": "Memory Arenas (experimental)",
+          "stars": 3
+        },
+        "02_atomic_types.go": {
+          "title": "New Atomic Types",
+          "stars": 4
+        }
+      }
+    },
+    "1.18": {
+      "full_version": "1.18.10",
+      "path": "/opt/go1.18/bin/go",
+      "lessons": {
+        "01_generics.go": {
+          "title": "Generics (Type Parameters)",
+          "stars": 5
+        },
+        "02_workspace_mode.go": {
+          "title": "Workspace Mode",
+          "stars": 4
+        },
+        "03_type_constraints.go": {
+          "title": "Type Constraints",
+          "stars": 5
+        },
+        "04_generic_data_structures.go": {
+          "title": "Generic Data Structures",
+          "stars": 5
+        },
+        "05_type_inference.go": {
+          "title": "Type Inference",
+          "stars": 4
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Release Tour - E2E Frontend Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-header {
+            background: linear-gradient(135deg, #00ADD8 0%, #5EC9D8 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .version-selector {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #00ADD8 0%, #5EC9D8 100%);
+            border-radius: 8px;
+        }
+        .version-selector h3 {
+            color: white;
+            margin: 0 0 10px 0;
+            text-align: center;
+        }
+        #version-select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .code-area {
+            margin: 20px 0;
+        }
+        #code-editor {
+            width: 100%;
+            height: 200px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+        }
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        button {
+            background: #00ADD8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        button:hover {
+            background: #0088aa;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .output {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            min-height: 100px;
+        }
+        .output.error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .test-results {
+            background: #e7f3ff;
+            border: 2px solid #b3d9ff;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .test-case {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .test-case h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .test-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .test-status.passed {
+            background: #d4edda;
+            color: #155724;
+        }
+        .test-status.failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .test-status.running {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .test-logs {
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>Go Release Tour - E2E Frontend Test</h1>
+        <p>フロントエンドの真のマルチバージョン実行をテストします</p>
+    </div>
+
+    <div class="test-container">
+        <div class="version-selector">
+            <h3>バージョン選択</h3>
+            <select id="version-select">
+                <option value="1.25" selected>Go 1.25 (最新)</option>
+                <option value="1.24">Go 1.24</option>
+                <option value="1.23">Go 1.23</option>
+                <option value="1.22">Go 1.22</option>
+                <option value="1.21">Go 1.21</option>
+                <option value="1.20">Go 1.20</option>
+                <option value="1.19">Go 1.19</option>
+                <option value="1.18">Go 1.18 (Generics)</option>
+            </select>
+        </div>
+
+        <div class="code-area">
+            <h3>コードエディター</h3>
+            <textarea id="code-editor" placeholder="ここにGoコードを入力してください...">package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello Go!")
+}</textarea>
+        </div>
+
+        <div class="controls">
+            <button id="run-btn" onclick="runCode()">実行</button>
+            <button onclick="runAllTests()">全バージョンテスト実行</button>
+            <button onclick="clearOutput()">クリア</button>
+        </div>
+
+        <div class="output" id="output">実行結果がここに表示されます</div>
+    </div>
+
+    <div class="test-container">
+        <h3>自動テスト結果</h3>
+        <div class="test-results" id="test-results">
+            <p>「全バージョンテスト実行」ボタンを押してテストを開始してください</p>
+        </div>
+    </div>
+
+    <script>
+        // テスト結果グローバル変数
+        let testResults = {};
+
+        // API実行関数
+        async function runCode() {
+            const code = document.getElementById('code-editor').value;
+            const versionSelect = document.getElementById('version-select');
+            const selectedVersion = versionSelect ? versionSelect.value : null;
+            const output = document.getElementById('output');
+            const runBtn = document.getElementById('run-btn');
+
+            console.log('Debug: versionSelect =', versionSelect);
+            console.log('Debug: selectedVersion =', selectedVersion);
+
+            if (!code.trim()) {
+                showError('コードを入力してください');
+                return;
+            }
+
+            if (!selectedVersion) {
+                showError('バージョンを選択してください');
+                return;
+            }
+
+            // ローディング状態
+            runBtn.disabled = true;
+            runBtn.textContent = '▶ 実行中...';
+            output.textContent = '実行中...';
+            output.className = 'output';
+
+            try {
+                const payload = {
+                    code: code,
+                    version: selectedVersion,
+                    auto_detect: false
+                };
+
+                console.log('Debug: Sending payload =', JSON.stringify(payload, null, 2));
+
+                const response = await fetch('/api/run', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Debug: Received result =', result);
+
+                // バージョン情報を表示
+                let versionInfo = '';
+                if (result.used_version || result.go_version) {
+                    versionInfo = `実行環境: Go ${result.go_version || result.used_version}`;
+                    if (result.execution_time) {
+                        versionInfo += ` | 実行時間: ${result.execution_time}`;
+                    }
+                    versionInfo += '\n' + '='.repeat(50) + '\n';
+                }
+
+                if (result.error) {
+                    output.textContent = versionInfo + `エラー: ${result.error}\n\n出力:\n${result.output}`;
+                    output.className = 'output error';
+                } else {
+                    output.textContent = versionInfo + (result.output || '実行完了（出力なし）');
+                    output.className = 'output';
+                }
+            } catch (error) {
+                console.error('Execution error:', error);
+                showError(`コードの実行に失敗しました: ${error.message}`);
+            } finally {
+                runBtn.disabled = false;
+                runBtn.textContent = '▶ 実行';
+            }
+        }
+
+        // エラー表示
+        function showError(message) {
+            const output = document.getElementById('output');
+            output.textContent = message;
+            output.className = 'output error';
+        }
+
+        // 出力クリア
+        function clearOutput() {
+            document.getElementById('output').textContent = '実行結果がここに表示されます';
+            document.getElementById('output').className = 'output';
+        }
+
+        // 全バージョンテスト実行
+        async function runAllTests() {
+            const testCases = [
+                {
+                    name: 'Go 1.25 - Basic Hello',
+                    version: '1.25',
+                    code: `package main\nimport "fmt"\nfunc main() {\n    fmt.Println("Hello Go 1.25!")\n}`,
+                    expectedOutput: 'Hello Go 1.25!'
+                },
+                {
+                    name: 'Go 1.24 - Generic Type Aliases',
+                    version: '1.24',
+                    code: `package main\nimport "fmt"\ntype StringList[T ~string] []T\nfunc main() {\n    var names StringList[string] = []string{"Alice", "Bob"}\n    fmt.Println("Names:", names)\n}`,
+                    expectedOutput: 'Names:'
+                },
+                {
+                    name: 'Go 1.23 - Structured Logging Concept',
+                    version: '1.23',
+                    code: `package main\nimport (\n    "encoding/json"\n    "fmt"\n    "time"\n)\nfunc main() {\n    logEntry := map[string]interface{}{\n        "time": time.Now().Format(time.RFC3339),\n        "level": "INFO",\n        "message": "Go 1.23 test",\n    }\n    jsonData, _ := json.Marshal(logEntry)\n    fmt.Println(string(jsonData))\n}`,
+                    expectedOutput: 'Go 1.23 test'
+                },
+                {
+                    name: 'Go 1.22 - For-Range over Integers',
+                    version: '1.22',
+                    code: `package main\nimport "fmt"\nfunc main() {\n    for i := range 3 {\n        fmt.Printf("Count: %d\\n", i)\n    }\n}`,
+                    expectedOutput: 'Count:'
+                },
+                {
+                    name: 'Go 1.21 - Slices Package',
+                    version: '1.21',
+                    code: `package main\nimport (\n    "fmt"\n    "slices"\n)\nfunc main() {\n    nums := []int{3, 1, 4}\n    slices.Sort(nums)\n    fmt.Println("Sorted:", nums)\n}`,
+                    expectedOutput: 'Sorted:'
+                }
+            ];
+
+            testResults = {};
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = '<h4>テスト実行中...</h4>';
+
+            for (const testCase of testCases) {
+                await runSingleTest(testCase);
+            }
+
+            displayTestResults();
+        }
+
+        // 単一テスト実行
+        async function runSingleTest(testCase) {
+            console.log(`Running test: ${testCase.name}`);
+
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch('/api/run', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        code: testCase.code,
+                        version: testCase.version,
+                        auto_detect: false
+                    }),
+                });
+
+                const result = await response.json();
+                const endTime = Date.now();
+                const executionTime = endTime - startTime;
+
+                if (result.error) {
+                    testResults[testCase.name] = {
+                        status: 'FAILED',
+                        error: result.error,
+                        executionTime: executionTime,
+                        version: testCase.version
+                    };
+                } else if (result.used_version !== testCase.version) {
+                    testResults[testCase.name] = {
+                        status: 'FAILED',
+                        error: `Version mismatch: expected ${testCase.version}, got ${result.used_version}`,
+                        executionTime: executionTime,
+                        version: testCase.version
+                    };
+                } else if (!result.output.includes(testCase.expectedOutput)) {
+                    testResults[testCase.name] = {
+                        status: 'FAILED',
+                        error: `Output mismatch: expected "${testCase.expectedOutput}"`,
+                        output: result.output,
+                        executionTime: executionTime,
+                        version: testCase.version
+                    };
+                } else {
+                    testResults[testCase.name] = {
+                        status: 'PASSED',
+                        output: result.output,
+                        executionTime: executionTime,
+                        version: testCase.version,
+                        goVersion: result.go_version
+                    };
+                }
+            } catch (error) {
+                const endTime = Date.now();
+                const executionTime = endTime - startTime;
+
+                testResults[testCase.name] = {
+                    status: 'FAILED',
+                    error: `Request failed: ${error.message}`,
+                    executionTime: executionTime,
+                    version: testCase.version
+                };
+            }
+        }
+
+        // テスト結果表示
+        function displayTestResults() {
+            const resultsDiv = document.getElementById('test-results');
+            const totalTests = Object.keys(testResults).length;
+            const passedTests = Object.values(testResults).filter(r => r.status === 'PASSED').length;
+            const failedTests = totalTests - passedTests;
+
+            let html = `
+                <h4>テスト結果サマリー</h4>
+                <p>総テスト数: ${totalTests} | 成功: ${passedTests} | 失敗: ${failedTests}</p>
+            `;
+
+            for (const [testName, result] of Object.entries(testResults)) {
+                const statusClass = result.status.toLowerCase();
+                html += `
+                    <div class="test-case">
+                        <h4>${testName} <span class="test-status ${statusClass}">${result.status}</span></h4>
+                        <p><strong>バージョン:</strong> ${result.version}</p>
+                        <p><strong>実行時間:</strong> ${result.executionTime}ms</p>
+                        ${result.goVersion ? `<p><strong>Goバージョン:</strong> ${result.goVersion}</p>` : ''}
+                        ${result.error ? `<p><strong>エラー:</strong> ${result.error}</p>` : ''}
+                        ${result.output ? `<div class="test-logs">${result.output}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            if (failedTests === 0) {
+                html += '<p style="color: green; font-weight: bold;">すべてのテストが成功しました！</p>';
+            } else {
+                html += '<p style="color: red; font-weight: bold;">一部のテストが失敗しました。</p>';
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('E2E Frontend Test page loaded');
+
+            // バージョンセレクター確認
+            const versionSelect = document.getElementById('version-select');
+            console.log('Version selector found:', versionSelect);
+            console.log('Initial selected version:', versionSelect ? versionSelect.value : 'not found');
+        });
+    </script>
+</body>
+</html>

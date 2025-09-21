@@ -3,13 +3,12 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
-	"os"
-	"os/exec"
-	"path/filepath"
 	"time"
 
 	"go-release-tour/app/internal/types"
+	"go-release-tour/app/internal/version"
 )
 
 // HandleVersions returns available Go versions
@@ -30,7 +29,8 @@ func HandleLessons(s *types.Server) http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/json")
 		version := r.URL.Query().Get("version")
 		if version == "" {
-			version = "1.25" // デフォルトバージョン
+			http.Error(w, "Version parameter is required", http.StatusBadRequest)
+			return
 		}
 		if lessons, exists := s.Lessons[version]; exists {
 			json.NewEncoder(w).Encode(lessons)
@@ -40,54 +40,115 @@ func HandleLessons(s *types.Server) http.HandlerFunc {
 	}
 }
 
-// CodeRunRequest represents a code execution request
+// CodeRunRequest represents a code execution request with version support
 type CodeRunRequest struct {
-	Code string `json:"code"`
+	Code    string `json:"code"`
+	Version string `json:"version"`    // 実行するGoバージョン（フロントエンドで決定済み）
 }
 
-// CodeRunResponse represents a code execution response
+// CodeRunResponse represents a code execution response with version info
 type CodeRunResponse struct {
-	Output string `json:"output"`
-	Error  string `json:"error"`
+	Output          string `json:"output"`
+	Error           string `json:"error,omitempty"`
+	GoVersion       string `json:"go_version,omitempty"`       // 使用されたGoの完全バージョン
+	UsedVersion     string `json:"used_version,omitempty"`     // 使用されたGoバージョン（例: 1.18）
+	DetectedVersion string `json:"detected_version,omitempty"` // 検出されたバージョン
+	ExecutionTime   string `json:"execution_time,omitempty"`   // 実行時間
+	VersionPath     string `json:"version_path,omitempty"`     // 使用されたGoバイナリのパス
 }
 
-// HandleRun executes Go code and returns the result
+// HandleRun executes Go code with appropriate version and returns the result
 func HandleRun(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var req CodeRunRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		log.Printf("[DEBUG] HandleRun: Failed to decode JSON: %v", err)
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
 
-	// 一時ファイルを作成
-	tempDir := os.TempDir()
-	filename := filepath.Join(tempDir, fmt.Sprintf("gocode_%d_%d.go", time.Now().Unix(), time.Now().Nanosecond()))
+	log.Printf("[DEBUG] HandleRun: Received request - Version=%q", req.Version)
+	log.Printf("[DEBUG] HandleRun: Code length=%d characters", len(req.Code))
 
-	// ファイルに書き込み
-	if err := os.WriteFile(filename, []byte(req.Code), 0644); err != nil {
+	if req.Version == "" {
+		log.Printf("[DEBUG] HandleRun: No version specified")
 		response := CodeRunResponse{
-			Error: fmt.Sprintf("Failed to write code to file: %v", err),
+			Error: "バージョンが指定されていません",
 		}
 		json.NewEncoder(w).Encode(response)
 		return
 	}
 
-	// 実行後にファイルを削除
-	defer os.Remove(filename)
+	// バージョン対応の実行器を作成
+	executor := version.NewExecutor()
 
-	// Goコードを実行
-	cmd := exec.Command("go", "run", filename)
-	output, err := cmd.CombinedOutput()
+	// 実行リクエストを構築
+	execReq := version.ExecutionRequest{
+		Code:       req.Code,
+		Version:    req.Version,
+		AutoDetect: false, // フロントエンドで決定済みなので自動検出不要
+		Timeout:    30 * time.Second,
+	}
 
+	log.Printf("[DEBUG] HandleRun: Using version: %s", req.Version)
+
+	// コード検証
+	log.Printf("[DEBUG] HandleRun: Validating code for version %s", req.Version)
+	if err := executor.ValidateCode(req.Code, req.Version); err != nil {
+		log.Printf("[DEBUG] HandleRun: Code validation failed: %v", err)
+		response := CodeRunResponse{
+			Error: fmt.Sprintf("コード検証エラー: %v", err),
+		}
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+	log.Printf("[DEBUG] HandleRun: Code validation passed")
+
+	// コードを実行
+	log.Printf("[DEBUG] HandleRun: Starting code execution")
+	result, err := executor.Execute(execReq)
+	log.Printf("[DEBUG] HandleRun: Execution completed - err=%v, result.Error=%q", err, result.Error)
+	log.Printf("[DEBUG] HandleRun: Execution result - GoVersion=%q, UsedVersion=%q", result.GoVersion, result.UsedVersion)
+
+	// レスポンスを構築
 	response := CodeRunResponse{
-		Output: string(output),
+		Output:          result.Output,
+		GoVersion:       result.GoVersion,
+		UsedVersion:     result.UsedVersion,
+		DetectedVersion: req.Version, // フロントエンドで決定されたバージョンをそのまま返す
+		ExecutionTime:   result.ExecutionTime.String(),
+		VersionPath:     result.VersionPath,
 	}
 
-	if err != nil {
-		response.Error = err.Error()
+	if err != nil || result.Error != "" {
+		errorMsg := ""
+		if err != nil {
+			errorMsg = err.Error()
+		}
+		if result.Error != "" {
+			if errorMsg != "" {
+				errorMsg += "; " + result.Error
+			} else {
+				errorMsg = result.Error
+			}
+		}
+		response.Error = errorMsg
+		log.Printf("[DEBUG] HandleRun: Response will include error: %s", errorMsg)
+	} else {
+		log.Printf("[DEBUG] HandleRun: Execution successful, no errors")
 	}
 
+	log.Printf("[DEBUG] HandleRun: Sending response")
 	json.NewEncoder(w).Encode(response)
+}
+
+// HandleVersionInfo returns detailed version information
+func HandleVersionInfo(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	manager := version.GetManager()
+	versionInfo := manager.Status()
+
+	json.NewEncoder(w).Encode(versionInfo)
 }

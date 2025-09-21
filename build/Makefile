@@ -27,52 +27,52 @@ help:
 dev: air
 
 air:
-	@echo "🔥 Starting development server with Air (hot reload)..."
+	@echo "Starting development server with Air (hot reload)..."
 	@command -v air >/dev/null 2>&1 || (echo "Installing Air..." && go install github.com/air-verse/air@latest)
 	cd .. && air -c build/.air.toml
 
 docker-dev:
-	@echo "🐳 Starting development environment with Docker..."
+	@echo "Starting development environment with Docker..."
 	cd .. && docker-compose -f docker-compose.dev.yml up
 
 # 本番環境
 prod: build
-	@echo "🚀 Starting production server..."
+	@echo "Starting production server..."
 	./go-release-tour
 
 docker-prod:
-	@echo "🐳 Starting production environment with Docker..."
+	@echo "Starting production environment with Docker..."
 	cd .. && docker-compose up -d
 
 docker-multi:
-	@echo "🌐 Starting multi-version environment with proxy..."
+	@echo "Starting multi-version environment with proxy..."
 	docker-compose -f docker-compose.multiversion.yml up -d
 
 build:
-	@echo "🔨 Building binary..."
+	@echo "Building binary..."
 	cd .. && go build -o go-release-tour ./app/cmd/server
 
 # ユーティリティ
 install:
-	@echo "📦 Installing dependencies and tools..."
+	@echo "Installing dependencies and tools..."
 	go mod download
 	go install github.com/air-verse/air@latest
-	@echo "✅ Installation complete!"
+	@echo "Installation complete!"
 
 clean:
-	@echo "🧹 Cleaning build artifacts..."
+	@echo "Cleaning build artifacts..."
 	rm -rf tmp/
 	rm -f go-release-tour
 	rm -f build-errors.log
 	docker system prune -f
-	@echo "✅ Clean complete!"
+	@echo "Clean complete!"
 
 stop:
-	@echo "🛑 Stopping all containers..."
+	@echo "Stopping all containers..."
 	docker-compose down
 	docker-compose -f docker-compose.dev.yml down
 	docker-compose -f docker-compose.multiversion.yml down
-	@echo "✅ All containers stopped!"
+	@echo "All containers stopped!"
 
 # クイックコマンド
 start: dev

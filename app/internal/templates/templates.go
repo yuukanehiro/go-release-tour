@@ -38,7 +38,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
                 <div class="version-selector">
                     <h3>バージョン選択</h3>
                     <select id="version-select">
-                        <option value="1.25">Go 1.25 (最新)</option>
+                        <option value="1.25" selected>Go 1.25 (最新)</option>
                         <option value="1.24">Go 1.24</option>
                         <option value="1.23">Go 1.23</option>
                         <option value="1.22">Go 1.22</option>
@@ -272,12 +272,14 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
                                 <option value="material">Material</option>
                                 <option value="dracula">Dracula</option>
                             </select>
-                            <button id="expand-btn" title="エディターを全画面表示">⛶ 展開</button>
                             <button id="run-btn">▶ 実行</button>
                         </div>
                     </div>
                     <div id="code-editor-container">
                         <textarea id="code-editor" placeholder="ここにGoコードを入力してください..."></textarea>
+                    </div>
+                    <div class="code-editor-footer">
+                        <button id="run-btn-bottom" class="run-btn-bottom">▶ 実行</button>
                     </div>
                 </div>
 

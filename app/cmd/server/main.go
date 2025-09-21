@@ -1,4 +1,40 @@
-// Go Release Tour - Go 1.25の新機能をインタラクティブに学習するWebチュートリアル
+// Go Release Tour - Interactive Web Tutorial for Go Language Features
+//
+// This application provides an interactive web-based tutorial for learning
+// new features introduced in Go versions 1.18 through 1.25. Each lesson
+// includes:
+// - Official documentation references
+// - Executable code examples
+// - Practical use cases
+// - Performance comparisons
+// - Best practices
+//
+// Architecture:
+// - Backend: Go HTTP server with lesson management
+// - Frontend: Vanilla JavaScript with CodeMirror integration
+// - Storage: File-based lesson content with dynamic loading
+// - Development: Docker Compose with hot reload support
+//
+// API Endpoints:
+// - GET /api/versions: Available Go versions
+// - GET /api/lessons?version=X.XX: Lessons for specific version
+// - POST /api/run: Execute Go code snippets
+//
+// Static Assets:
+// - /static/: CSS, JS, images, and other static resources
+//
+// Environment Variables:
+// - APP_PORT: Server port (default: 8080)
+// - GO_VERSION: Go version for display purposes
+//
+// Usage:
+//   go run ./app/cmd/server
+//   # or with Docker Compose:
+//   docker-compose up
+//
+// Author: Go Release Tour Project
+// License: MIT
+// Go Version: 1.24+
 package main
 
 import (
@@ -23,10 +59,14 @@ func main() {
 	// 静的ファイル
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
+	// テストファイル（開発環境専用）
+	http.Handle("/tests/", http.StripPrefix("/tests/", http.FileServer(http.Dir("tests"))))
+
 	// APIエンドポイント
 	http.HandleFunc("/api/versions", handlers.HandleVersions(server))
 	http.HandleFunc("/api/lessons", handlers.HandleLessons(server))
 	http.HandleFunc("/api/run", handlers.HandleRun)
+	http.HandleFunc("/api/version-info", handlers.HandleVersionInfo)
 
 	// メインページ
 	http.HandleFunc("/", templates.HandleIndex)

@@ -1,11 +1,56 @@
-# Airホットリロード機能付き開発用Dockerfile
-FROM golang:1.25-alpine
+# Multi-version Go Development Environment with Hot Reload
+# 開発環境用 - 複数Goバージョン対応 + Airホットリロード
 
-# ホットリロード用にAirをインストール
-RUN go install github.com/air-verse/air@latest
+FROM debian:bookworm-slim
 
-# ヘルスチェック用にcurlをインストール
-RUN apk add --no-cache curl
+# 必要なツールをインストール
+RUN apt-get update && apt-get install -y \
+    wget \
+    tar \
+    ca-certificates \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# 各Goバージョンをインストール（開発環境用）
+ARG GO_VERSIONS="1.18.10 1.19.13 1.20.14 1.21.12 1.22.7 1.23.1 1.24.0 1.25.1"
+
+# プラットフォーム検出とGoアーキテクチャ決定
+RUN mkdir -p /opt/go && \
+    ARCH=$(dpkg --print-architecture) && \
+    if [ "$ARCH" = "amd64" ]; then \
+        GO_ARCH="amd64"; \
+    elif [ "$ARCH" = "arm64" ]; then \
+        GO_ARCH="arm64"; \
+    else \
+        echo "Unsupported architecture: $ARCH" && exit 1; \
+    fi && \
+    echo "Detected architecture: $ARCH, using Go arch: $GO_ARCH" && \
+    for version in $GO_VERSIONS; do \
+        echo "Installing Go ${version} for development (${GO_ARCH})..." && \
+        major_minor=$(echo $version | cut -d. -f1,2) && \
+        wget -q -O- "https://go.dev/dl/go${version}.linux-${GO_ARCH}.tar.gz" | \
+        tar -xz -C /tmp && \
+        mv /tmp/go "/opt/go${major_minor}" && \
+        echo "Go ${version} installed at /opt/go${major_minor}" \
+    ; done
+
+# デフォルトのGoを最新バージョンに設定
+ENV PATH="/opt/go1.25/bin:$PATH"
+ENV GOPATH="/go"
+ENV PATH="$GOPATH/bin:$PATH"
+
+# Air（ホットリロード）をインストール
+RUN /opt/go1.25/bin/go install github.com/air-verse/air@latest
+
+# バージョン確認
+RUN echo "Development environment Go versions:" && \
+    for dir in /opt/go*; do \
+        version_path="$dir/bin/go" && \
+        if [ -x "$version_path" ]; then \
+            echo "- $version_path: $($version_path version)" \
+        ; fi \
+    ; done
 
 WORKDIR /app
 
@@ -22,6 +67,11 @@ COPY . .
 RUN mkdir -p tmp
 
 EXPOSE 8080
+
+# 環境変数でマルチバージョン開発環境を示す
+ENV MULTI_GO_SUPPORT=true
+ENV GO_VERSIONS_AVAILABLE="1.18,1.19,1.20,1.21,1.22,1.23,1.24,1.25"
+ENV DEVELOPMENT_MODE=true
 
 # ホットリロード用にAirを使用
 CMD ["air", "-c", "build/.air.toml"]

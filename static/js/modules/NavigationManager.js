@@ -32,7 +32,7 @@ class NavigationManager {
 
         // Theme selector setup is handled by EditorManager
 
-        // Run button
+        // Run buttons
         const runBtn = document.getElementById('run-btn');
         if (runBtn) {
             runBtn.addEventListener('click', () => {
@@ -40,19 +40,27 @@ class NavigationManager {
             });
         }
 
-        // Expand button
-        const expandBtn = document.getElementById('expand-btn');
-        if (expandBtn) {
-            expandBtn.addEventListener('click', () => {
-                this.tour.toggleEditorExpand();
+        const runBtnBottom = document.getElementById('run-btn-bottom');
+        if (runBtnBottom) {
+            runBtnBottom.addEventListener('click', () => {
+                this.tour.runCode();
             });
         }
+
 
         // Fullscreen toggle
         const fullscreenBtn = document.getElementById('fullscreen-btn');
         if (fullscreenBtn) {
             fullscreenBtn.addEventListener('click', () => {
                 this.toggleFullscreen();
+            });
+        }
+
+        // Back to versions button
+        const backBtn = document.getElementById('back-to-versions');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                this.backToVersions();
             });
         }
 
@@ -145,6 +153,27 @@ class NavigationManager {
             if (document.exitFullscreen) {
                 document.exitFullscreen();
             }
+        }
+    }
+
+    backToVersions() {
+        // ウェルカム画面を表示してレッスン画面を非表示
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const lessonView = document.getElementById('lesson-view');
+
+        if (welcomeScreen && lessonView) {
+            welcomeScreen.style.display = 'block';
+            lessonView.style.display = 'none';
+        }
+
+        // 現在のレッスンをクリア
+        this.tour.currentLesson = null;
+        this.tour.currentVersion = null;
+
+        // バージョンセレクターをリセット
+        const versionSelect = document.getElementById('version-select');
+        if (versionSelect) {
+            versionSelect.value = '';
         }
     }
 }

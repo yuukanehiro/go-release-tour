@@ -12,8 +12,12 @@ class GoReleaseTour {
     async init() {
         console.log('Initializing Go Release Tour...');
 
-        // 常にバージョンセレクターを設定
-        this.populateVersionSelector();
+        // HTMLに既にバージョンセレクターがあるので、populateVersionSelectorは不要
+        // デフォルトバージョンをHTMLの選択値に合わせる
+        const versionSelect = document.getElementById('version-select');
+        if (versionSelect && versionSelect.value) {
+            this.currentVersion = versionSelect.value;
+        }
 
         // 最初にイベントリスナーを設定
         this.setupEventListeners();
@@ -114,48 +118,8 @@ class GoReleaseTour {
         output.className = 'error';
     }
 
-    toggleEditorExpand() {
-        const codeSection = document.querySelector('.code-section');
-        const expandBtn = document.getElementById('expand-btn');
-
-        if (!codeSection || !expandBtn) return;
-
-        this.isEditorExpanded = !this.isEditorExpanded;
-
-        if (this.isEditorExpanded) {
-            // 展開状態
-            codeSection.classList.add('expanded');
-            expandBtn.innerHTML = '⚏ 縮小';
-            expandBtn.title = 'エディターを通常表示に戻す';
-
-            // CodeMirrorエディターがある場合はリフレッシュ
-            if (this.codeEditor) {
-                setTimeout(() => {
-                    // エディターサイズを調整
-                    const editorHeight = window.innerHeight - 80;
-                    this.codeEditor.setSize(null, editorHeight);
-                    this.codeEditor.refresh();
-
-                    // スクロール要素を取得してスクロールを有効化
-                    const scrollElement = this.codeEditor.getScrollerElement();
-                    if (scrollElement) {
-                        scrollElement.style.overflow = 'auto';
-                        scrollElement.style.height = editorHeight + 'px';
-                    }
-                }, 100);
-            }
-        } else {
-            // 通常状態
-            codeSection.classList.remove('expanded');
-            expandBtn.innerHTML = '⛶ 展開';
-            expandBtn.title = 'エディターを全画面表示';
-
-            // CodeMirrorエディターがある場合はリフレッシュ
-            if (this.codeEditor) {
-                setTimeout(() => {
-                    this.codeEditor.refresh();
-                }, 100);
-            }
-        }
-    }
+    // 展開機能は無効化されました
+    // toggleEditorExpand() {
+    //     // 機能無効化のため削除
+    // }
 }

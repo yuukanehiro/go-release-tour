@@ -77,7 +77,7 @@ func simulateWorkload() {
 	// 別のgoroutineで「重要なイベント」をシミュレート
 	go func() {
 		time.Sleep(100 * time.Millisecond)
-		fmt.Println("🚨 重要イベント発生: パフォーマンス問題を検出")
+		fmt.Println("重要イベント発生: パフォーマンス問題を検出")
 		fmt.Println("   → この時点でTrace Flight Recorderがトレースを保存")
 	}()
 

@@ -155,7 +155,7 @@ func demonstratePerformance() {
 
 	if modernTime < traditionalTime {
 		improvement := float64(traditionalTime-modernTime) / float64(traditionalTime) * 100
-		fmt.Printf("🚀 %.1f%%の性能向上\n", improvement)
+		fmt.Printf("%.1f%%の性能向上\n", improvement)
 	}
 }
 
@@ -304,4 +304,4 @@ func demonstrateErrorHandling() {
 // slices.Concat: 23.1µs
 // 結果サイズ: 5000要素
 // ✅ 結果は同一
-// 🚀 48.9%の性能向上
+// 48.9%の性能向上

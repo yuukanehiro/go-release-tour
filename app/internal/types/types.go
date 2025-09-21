@@ -7,6 +7,7 @@ type Lesson struct {
 	Description string `json:"description"`
 	Code        string `json:"code"`
 	Filename    string `json:"filename"`
+	FilePath    string `json:"file_path"`    // Full path for version detection
 	Stars       int    `json:"stars"`
 	Version     string `json:"version"`
 }
