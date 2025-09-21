@@ -1,5 +1,5 @@
 {
-  "test_run": "2025-09-21T19:48:49+09:00",
+  "test_run": "2025-09-21T21:45:03+09:00",
   "tests": [
     {
       "name": "Basic Hello World",
@@ -7,7 +7,7 @@
       "status": "PASSED",
       "execution_time": "0s",
       "error": "",
-      "timestamp": "2025-09-21T10:48:49Z"
+      "timestamp": "2025-09-21T12:45:03Z"
     },
     {
       "name": "Generic Type Aliases",
@@ -15,15 +15,15 @@
       "status": "PASSED",
       "execution_time": "0s",
       "error": "",
-      "timestamp": "2025-09-21T10:48:49Z"
+      "timestamp": "2025-09-21T12:45:03Z"
     },
     {
       "name": "Structured Logging Concept",
       "version": "1.23",
       "status": "PASSED",
-      "execution_time": "1.00s",
+      "execution_time": "0s",
       "error": "",
-      "timestamp": "2025-09-21T10:48:50Z"
+      "timestamp": "2025-09-21T12:45:03Z"
     },
     {
       "name": "For-Range over Integers",
@@ -31,7 +31,7 @@
       "status": "PASSED",
       "execution_time": "0s",
       "error": "",
-      "timestamp": "2025-09-21T10:48:50Z"
+      "timestamp": "2025-09-21T12:45:03Z"
     },
     {
       "name": "Slices Package",
@@ -39,23 +39,23 @@
       "status": "PASSED",
       "execution_time": "0s",
       "error": "",
-      "timestamp": "2025-09-21T10:48:50Z"
+      "timestamp": "2025-09-21T12:45:03Z"
     },
     {
       "name": "Basic Go 1.20",
       "version": "1.20",
       "status": "PASSED",
-      "execution_time": "2.00s",
+      "execution_time": "0s",
       "error": "",
-      "timestamp": "2025-09-21T10:48:52Z"
+      "timestamp": "2025-09-21T12:45:03Z"
     },
     {
       "name": "Basic Go 1.19",
       "version": "1.19",
       "status": "PASSED",
-      "execution_time": "0s",
+      "execution_time": "1.00s",
       "error": "",
-      "timestamp": "2025-09-21T10:48:52Z"
+      "timestamp": "2025-09-21T12:45:04Z"
     },
     {
       "name": "Invalid Version",
@@ -63,7 +63,7 @@
       "status": "FAILED",
       "execution_time": "0s",
       "error": "サポートされていないGoバージョン: 999.999; バージョン設定エラー: サポートされていないGoバージョン: 999.999",
-      "timestamp": "2025-09-21T10:48:52Z"
+      "timestamp": "2025-09-21T12:45:04Z"
     }
   ]
 }

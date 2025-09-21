@@ -41,3 +41,6 @@ Thumbs.db
 
 # MacOS
 .DS_Store
+
+# Test
+tests/results/*

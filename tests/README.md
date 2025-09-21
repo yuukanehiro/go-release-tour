@@ -1,23 +1,40 @@
-# Go Release Tour - E2E Testing
+# Go Release Tour - Testing
 
-このディレクトリには、Go Release Tourの真のマルチバージョン実装をテストするためのE2Eテストが含まれています。
+このディレクトリには、Go Release Tourの包括的なテストスイートが含まれています。
 
-## テストファイル
+## ディレクトリ構造
 
-### 1. APIテスト (`e2e_api_test.sh`)
+```
+tests/
+├── README.md               # このファイル
+├── e2e/                   # End-to-End テスト
+│   ├── e2e_api_test.sh    # APIテスト
+│   └── e2e_frontend_test.html # フロントエンドテスト
+├── integration/           # 統合テスト
+│   └── test_all_lessons.sh # 全レッスンテスト
+├── unit/                  # ユニットテスト（将来追加予定）
+└── results/               # テスト結果ファイル
+    ├── e2e_test_results.json
+    ├── test_results.txt
+    └── test_errors.txt
+```
+
+## テスト種別
+
+### 1. End-to-End テスト (`e2e/`)
+
+#### APIテスト (`e2e/e2e_api_test.sh`)
 
 **概要**: バックエンドAPIの各Goバージョンでの実行をテストする自動化スクリプト
 
 **実行方法**:
 ```bash
-# テストスクリプトを実行可能にする
-chmod +x tests/e2e_api_test.sh
+# 全テスト実行（推奨）
+make test
 
-# サーバーが起動していることを確認（localhost:8080）
-docker-compose -f docker-compose.dev.yml up
-
-# テスト実行
-./tests/e2e_api_test.sh
+# 個別実行
+chmod +x tests/e2e/e2e_api_test.sh
+./tests/e2e/e2e_api_test.sh
 ```
 
 **テスト内容**:

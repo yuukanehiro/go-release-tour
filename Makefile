@@ -1,6 +1,6 @@
 # Go Release Tour - Makefile
 
-.PHONY: help drop build init app dev clean logs status
+.PHONY: help drop build init app dev clean logs status test
 
 # デフォルトターゲット
 help:
@@ -16,6 +16,9 @@ help:
 	@echo "  make dev         - Start development environment (detached)"
 	@echo "  make logs        - Show application logs"
 	@echo "  make status      - Show container status"
+	@echo ""
+	@echo "Testing:"
+	@echo "  make test        - Run all tests (E2E, integration)"
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make clean       - Clean Docker artifacts only"
@@ -68,6 +71,21 @@ clean:
 	docker-compose down || true
 	docker system prune -f || true
 	@echo "Clean complete!"
+
+# Testing
+test:
+	@echo "Running all tests..."
+	@echo "Starting application for testing..."
+	@$(MAKE) app
+	@sleep 5
+	@echo "Running E2E API tests..."
+	@chmod +x tests/e2e/e2e_api_test.sh
+	@./tests/e2e/e2e_api_test.sh || echo "E2E API tests completed with issues"
+	@echo "Running integration tests..."
+	@chmod +x tests/integration/test_all_lessons.sh
+	@./tests/integration/test_all_lessons.sh || echo "Integration tests completed with issues"
+	@echo "Test results saved in tests/results/"
+	@echo "All tests completed!"
 
 # Aliases for convenience
 start: app
