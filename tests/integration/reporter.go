@@ -93,7 +93,7 @@ func (r *TestRunner) generateTextReport(results *TestResults) error {
 	sb.WriteString(fmt.Sprintf("\n終了時刻: %s\n", time.Now().Format("Mon Jan 2 15:04:05 MST 2006")))
 
 	// ファイルに書き込み
-	return os.WriteFile(filePath, []byte(sb.String()), 0644)
+	return os.WriteFile(filePath, []byte(sb.String()), 0600)
 }
 
 // generateErrorReport エラーレポートを生成
@@ -103,7 +103,7 @@ func (r *TestRunner) generateErrorReport(results *TestResults) error {
 	failures := results.GetFailures()
 	if len(failures) == 0 {
 		// エラーがない場合は空ファイルを作成
-		return os.WriteFile(filePath, []byte(""), 0644)
+		return os.WriteFile(filePath, []byte(""), 0600)
 	}
 
 	var sb strings.Builder
@@ -121,7 +121,7 @@ func (r *TestRunner) generateErrorReport(results *TestResults) error {
 		sb.WriteString("---\n")
 	}
 
-	return os.WriteFile(filePath, []byte(sb.String()), 0644)
+	return os.WriteFile(filePath, []byte(sb.String()), 0600)
 }
 
 // getBasicAPIResults 基本APIテストの結果を取得

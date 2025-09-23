@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -93,7 +94,7 @@ func (r *TestRunner) runVersionTests(version string) ([]*TestResult, error) {
 	goFiles, err := r.findGoFiles(versionDir)
 	if err != nil {
 		fmt.Printf("[WARN] ディレクトリが存在しないか読み取れません: %s\n", versionDir)
-		return nil, nil
+		return nil, err
 	}
 
 	if len(goFiles) == 0 {
@@ -173,7 +174,22 @@ func (r *TestRunner) testAPIWithCode(version, code, testName string) *TestResult
 	}
 
 	// API呼び出し
-	resp, err := r.Client.Post(r.APIURL, "application/json", bytes.NewBuffer(payloadBytes))
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(ctx, "POST", r.APIURL, bytes.NewBuffer(payloadBytes))
+	if err != nil {
+		fmt.Println("[FAIL]")
+		return &TestResult{
+			TestName: testName,
+			Version:  version,
+			Status:   "FAIL",
+			Error:    fmt.Sprintf("Failed to create request: %v", err),
+		}
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := r.Client.Do(req)
 	if err != nil {
 		fmt.Println("[FAIL]")
 		return &TestResult{
@@ -201,10 +217,10 @@ func (r *TestRunner) testAPIWithCode(version, code, testName string) *TestResult
 	if err := json.Unmarshal(responseBody, &apiResponse); err != nil {
 		fmt.Println("[FAIL]")
 		return &TestResult{
-			TestName: testName,
-			Version:  version,
-			Status:   "FAIL",
-			Error:    fmt.Sprintf("Failed to parse response: %v", err),
+			TestName:    testName,
+			Version:     version,
+			Status:      "FAIL",
+			Error:       fmt.Sprintf("Failed to parse response: %v", err),
 			RawResponse: string(responseBody),
 		}
 	}
@@ -213,10 +229,10 @@ func (r *TestRunner) testAPIWithCode(version, code, testName string) *TestResult
 	if errorField, exists := apiResponse["error"]; exists && errorField != nil && errorField != "" {
 		fmt.Println("[FAIL]")
 		return &TestResult{
-			TestName: testName,
-			Version:  version,
-			Status:   "FAIL",
-			Error:    fmt.Sprintf("%v", errorField),
+			TestName:    testName,
+			Version:     version,
+			Status:      "FAIL",
+			Error:       fmt.Sprintf("%v", errorField),
 			RawResponse: string(responseBody),
 		}
 	}
@@ -225,9 +241,9 @@ func (r *TestRunner) testAPIWithCode(version, code, testName string) *TestResult
 	fmt.Println("[PASS]")
 
 	result := &TestResult{
-		TestName: testName,
-		Version:  version,
-		Status:   "PASS",
+		TestName:    testName,
+		Version:     version,
+		Status:      "PASS",
 		RawResponse: string(responseBody),
 	}
 
