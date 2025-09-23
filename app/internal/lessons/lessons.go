@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"go-release-tour/app/internal/config"
@@ -79,13 +80,37 @@ func loadVersionLessons(s *types.Server, version string, configManager *config.C
 			Description: description,
 			Code:        string(content),
 			Filename:    filename,
-			FilePath:    file,               // ファイルパスを追加
+			FilePath:    file, // ファイルパスを追加
 			Stars:       data.Stars,
 			Version:     version,
+			EnvPresets:  parseEnvPresets(string(content)), // 環境変数プリセットを解析
 		}
 		lessons = append(lessons, lesson)
 	}
 	s.Lessons[version] = lessons
+}
+
+// parseEnvPresets parses environment variable presets from lesson code comments
+// Format: // @env-preset: Name|Value|Description
+func parseEnvPresets(content string) []types.EnvPreset {
+	var presets []types.EnvPreset
+
+	// 正規表現でプリセット行を検索
+	re := regexp.MustCompile(`//\s*@env-preset:\s*([^|]+)\|([^|]+)\|(.+)`)
+	matches := re.FindAllStringSubmatch(content, -1)
+
+	for _, match := range matches {
+		if len(match) >= 4 {
+			preset := types.EnvPreset{
+				Name:        strings.TrimSpace(match[1]),
+				Value:       strings.TrimSpace(match[2]),
+				Description: strings.TrimSpace(match[3]),
+			}
+			presets = append(presets, preset)
+		}
+	}
+
+	return presets
 }
 
 // Note: Lesson metadata is now loaded from config/versions.json

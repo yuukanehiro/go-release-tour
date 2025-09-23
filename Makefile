@@ -1,6 +1,6 @@
 # Go Release Tour - Makefile
 
-.PHONY: help drop build init app dev clean logs status test
+.PHONY: help drop build init app dev clean logs status test test-verbose
 
 # デフォルトターゲット
 help:

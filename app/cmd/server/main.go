@@ -28,9 +28,10 @@
 // - GO_VERSION: Go version for display purposes
 //
 // Usage:
-//   go run ./app/cmd/server
-//   # or with Docker Compose:
-//   docker-compose up
+//
+//	go run ./app/cmd/server
+//	# or with Docker Compose:
+//	docker-compose up
 //
 // Author: Go Release Tour Project
 // License: MIT
@@ -49,6 +50,15 @@ import (
 	"go-release-tour/app/internal/types"
 )
 
+// addNoCacheHeaders は開発環境でキャッシュを無効化するミドルウェア
+func addNoCacheHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		w.Header().Set("Pragma", "no-cache")
+		w.Header().Set("Expires", "0")
+		next.ServeHTTP(w, r)
+	})
+}
 
 func main() {
 	server := &types.Server{
@@ -56,8 +66,9 @@ func main() {
 	}
 	lessons.LoadLessons(server)
 
-	// 静的ファイル
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	// 静的ファイル（開発環境用キャッシュ無効化）
+	staticHandler := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))
+	http.Handle("/static/", addNoCacheHeaders(staticHandler))
 
 	// テストファイル（開発環境専用）
 	http.Handle("/tests/", http.StripPrefix("/tests/", http.FileServer(http.Dir("tests"))))
@@ -86,6 +97,3 @@ func main() {
 	fmt.Printf("Visit http://localhost:%s\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
-
-
-

@@ -21,9 +21,9 @@ type LessonInfo struct {
 
 // VersionConfig represents configuration for a specific Go version
 type VersionConfig struct {
-	FullVersion string                 `json:"full_version"`
-	Path        string                 `json:"path"`
-	Lessons     map[string]LessonInfo  `json:"lessons"`
+	FullVersion string                `json:"full_version"`
+	Path        string                `json:"path"`
+	Lessons     map[string]LessonInfo `json:"lessons"`
 }
 
 // Config represents the complete configuration
@@ -179,7 +179,7 @@ func (cm *ConfigManager) GetConfigSummary() map[string]interface{} {
 	versionDetails := make(map[string]interface{})
 	for version, versionConfig := range cm.config.Versions {
 		versionDetails[version] = map[string]interface{}{
-			"full_version":  versionConfig.FullVersion,
+			"full_version": versionConfig.FullVersion,
 			"path":         versionConfig.Path,
 			"lesson_count": len(versionConfig.Lessons),
 		}

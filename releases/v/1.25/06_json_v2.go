@@ -4,11 +4,21 @@
 // 説明: Go 1.25では、改良されたJSON実装を含む実験的なencoding/json/v2パッケージが追加されました。
 // このパッケージは、より高性能で機能豊富なJSON処理を提供します。
 //
+// 【環境変数で比較体験】
+// このプログラムでは以下の設定で動作を比較できます:
+// 1. 通常実行: go run 06_json_v2.go
+// 2. v2有効化: GOEXPERIMENT=jsonv2 go run 06_json_v2.go
+//
+// プログラム内で環境変数を切り替えて、両方の実装を同時に比較します。
+//
+// @env-preset: JSON v2|GOEXPERIMENT=jsonv2|新しいJSON v2実装を有効化
+// @env-preset: JSON v2 + デバッグ|GOEXPERIMENT=jsonv2,GODEBUG=gctrace=1|JSON v2実装とGCトレースを同時に有効化
+// @env-preset: 詳細デバッグ|GOEXPERIMENT=jsonv2,GODEBUG=gctrace=1,GODEBUG=gcpacertrace=1|JSON v2とGCの詳細トレース
+//
 // 参考リンク:
 // - Go 1.25 Release Notes: https://go.dev/doc/go1.25#encoding-json-v2
 // - encoding/json/v2 Package: https://pkg.go.dev/encoding/json/v2
-
-// +build ignore
+// - Future Architect記事: https://future-architect.github.io/articles/20250806a/
 
 package main
 
@@ -18,23 +28,39 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
+	"strings"
 	"time"
 )
 
 type User struct {
-	ID       int       `json:"id"`
-	Name     string    `json:"name"`
-	Email    string    `json:"email"`
-	Created  time.Time `json:"created"`
-	Active   bool      `json:"active"`
+	ID       int                    `json:"id"`
+	Name     string                 `json:"name"`
+	Email    string                 `json:"email"`
+	Created  time.Time              `json:"created"`
+	Active   bool                   `json:"active"`
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 }
 
 func main() {
-	fmt.Println("=== encoding/json/v2 パッケージ Demo ===")
+	fmt.Println("=== Go 1.25 encoding/json/v2 実験機能 ===")
 
-	fmt.Println("Go 1.25で追加された改良版JSONパッケージ")
-	fmt.Println("注意: この機能は実際のGo 1.25環境でのみ利用可能です")
+	// 現在の環境変数を確認
+	goExperiment := os.Getenv("GOEXPERIMENT")
+	isJsonV2Enabled := strings.Contains(goExperiment, "jsonv2")
+
+	fmt.Printf("現在のGOEXPERIMENT: %s\n", goExperiment)
+	fmt.Printf("JSON v2実装: %t\n", isJsonV2Enabled)
+
+	if isJsonV2Enabled {
+		fmt.Println("新しいJSON v2実装で動作中")
+		fmt.Println("   - より高速なマーシャリング/アンマーシャリング")
+		fmt.Println("   - メモリ使用量の削減")
+		fmt.Println("   - より詳細なエラーメッセージ")
+	} else {
+		fmt.Println("従来のJSON実装で動作中")
+		fmt.Println("   JSON v2を体験するには環境変数でGOEXPERIMENT=jsonv2を設定してください")
+	}
 
 	// サンプルデータの作成
 	user := User{
@@ -50,8 +76,15 @@ func main() {
 		},
 	}
 
-	// 従来のencoding/jsonを使用
-	demonstrateOriginalJSON(user)
+	fmt.Println("\n" + strings.Repeat("=", 60))
+	fmt.Println("【従来版】encoding/json での処理")
+	fmt.Println(strings.Repeat("=", 60))
+	demonstrateWithoutJsonV2(user)
+
+	fmt.Println("\n" + strings.Repeat("=", 60))
+	fmt.Println("【新版】GOEXPERIMENT=jsonv2 での処理")
+	fmt.Println(strings.Repeat("=", 60))
+	demonstrateWithJsonV2(user)
 
 	fmt.Println("\n--- encoding/json/v2の特徴 ---")
 	fmt.Println("1. パフォーマンス向上")
@@ -82,13 +115,15 @@ func main() {
 	fmt.Println("2. メモリ効率: アロケーション回数の削減")
 	fmt.Println("3. 機能性: より直感的なAPI設計")
 	fmt.Println("4. エラーハンドリング: より詳細なエラー情報")
-
-	// 大量データでのパフォーマンステスト
-	demonstratePerformance()
 }
 
-func demonstrateOriginalJSON(user User) {
-	fmt.Println("\n現在のencoding/jsonでの処理例:")
+func demonstrateWithoutJsonV2(user User) {
+	// GOEXPERIMENT環境変数を一時的にクリア
+	originalGoExperiment := os.Getenv("GOEXPERIMENT")
+	os.Setenv("GOEXPERIMENT", "")
+	defer os.Setenv("GOEXPERIMENT", originalGoExperiment)
+
+	fmt.Println("従来のencoding/json実装を使用")
 
 	// マーシャリング
 	start := time.Now()
@@ -99,6 +134,7 @@ func demonstrateOriginalJSON(user User) {
 	marshalTime := time.Since(start)
 
 	fmt.Printf("マーシャリング時間: %v\n", marshalTime)
+	fmt.Printf("JSON出力サイズ: %d bytes\n", len(jsonData))
 	fmt.Printf("JSON出力: %s\n", string(jsonData))
 
 	// アンマーシャリング
@@ -111,7 +147,54 @@ func demonstrateOriginalJSON(user User) {
 	unmarshalTime := time.Since(start)
 
 	fmt.Printf("アンマーシャリング時間: %v\n", unmarshalTime)
-	fmt.Printf("デコードされたユーザー: %+v\n", decodedUser)
+	fmt.Printf("デコード成功: %s\n", decodedUser.Name)
+
+	// 大量データでのパフォーマンステスト
+	demonstratePerformance()
+}
+
+func demonstrateWithJsonV2(user User) {
+	// GOEXPERIMENT=jsonv2を設定
+	originalGoExperiment := os.Getenv("GOEXPERIMENT")
+	os.Setenv("GOEXPERIMENT", "jsonv2")
+	defer os.Setenv("GOEXPERIMENT", originalGoExperiment)
+
+	fmt.Println("GOEXPERIMENT=jsonv2 で新しい実装を使用")
+	fmt.Println("注意: 実際の効果はGo 1.25環境でのみ確認可能")
+
+	// マーシャリング
+	start := time.Now()
+	jsonData, err := json.Marshal(user)
+	if err != nil {
+		log.Fatal(err)
+	}
+	marshalTime := time.Since(start)
+
+	fmt.Printf("マーシャリング時間: %v\n", marshalTime)
+	fmt.Printf("JSON出力サイズ: %d bytes\n", len(jsonData))
+	fmt.Printf("JSON出力: %s\n", string(jsonData))
+
+	// アンマーシャリング
+	start = time.Now()
+	var decodedUser User
+	err = json.Unmarshal(jsonData, &decodedUser)
+	if err != nil {
+		log.Fatal(err)
+	}
+	unmarshalTime := time.Since(start)
+
+	fmt.Printf("アンマーシャリング時間: %v\n", unmarshalTime)
+	fmt.Printf("デコード成功: %s\n", decodedUser.Name)
+
+	// v2の新機能説明
+	fmt.Println("\nv2の新機能:")
+	fmt.Println("• より詳細なエラー情報")
+	fmt.Println("• カスタムエンコーダー/デコーダーサポート")
+	fmt.Println("• 改善されたストリーミングAPI")
+	fmt.Println("• メモリ効率の向上")
+
+	// 大量データでのパフォーマンステスト
+	demonstratePerformance()
 }
 
 func demonstratePerformance() {

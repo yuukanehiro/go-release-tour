@@ -275,6 +275,18 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
                             <button id="run-btn">▶ 実行</button>
                         </div>
                     </div>
+                    <div class="env-controls">
+                        <div class="env-header">
+                            <label for="env-vars">環境変数設定:</label>
+                        </div>
+                        <div class="env-input-group">
+                            <input type="text" id="env-vars" placeholder="KEY=value の形式で入力（複数の場合はカンマ区切り）" />
+                            <div id="env-presets"></div>
+                        </div>
+                        <div class="env-info">
+                            <small id="env-info-text">💡 このレッスンに適用可能な環境変数のプリセットが表示されます</small>
+                        </div>
+                    </div>
                     <div id="code-editor-container">
                         <textarea id="code-editor" placeholder="ここにGoコードを入力してください..."></textarea>
                     </div>

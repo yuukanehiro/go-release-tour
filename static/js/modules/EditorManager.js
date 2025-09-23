@@ -43,15 +43,6 @@ class EditorManager {
                 }
             });
 
-            // エディターの自動保存
-            this.tour.codeEditor.on('change', () => {
-                if (this.tour.currentLesson) {
-                    localStorage.setItem(
-                        `lesson-${this.tour.currentLesson.version}-${this.tour.currentLesson.id}-code`,
-                        this.tour.codeEditor.getValue()
-                    );
-                }
-            });
 
             // テーマセレクターの初期化
             this.setupThemeSelector();
@@ -95,15 +86,12 @@ class EditorManager {
 
         // CodeMirrorエディターまたは通常のtextareaを使用
         if (this.tour.codeEditor) {
-            // 保存されたコードがあればそれを使用
-            const savedCode = localStorage.getItem(`lesson-${lesson.version}-${lesson.id}-code`);
-            this.tour.codeEditor.setValue(savedCode || code);
+            this.tour.codeEditor.setValue(code);
         } else {
             // フォールバック: 通常のtextarea
             const editor = document.getElementById('code-editor');
             if (editor) {
-                const savedCode = localStorage.getItem(`lesson-${lesson.version}-${lesson.id}-code`);
-                editor.value = savedCode || code;
+                editor.value = code;
             }
         }
     }
@@ -124,12 +112,6 @@ class EditorManager {
                     }
                 });
 
-                // localStorageに自動保存
-                editor.addEventListener('input', () => {
-                    if (this.tour.currentLesson) {
-                        localStorage.setItem(`lesson-${this.tour.currentLesson.version}-${this.tour.currentLesson.id}-code`, editor.value);
-                    }
-                });
             }
         }
     }

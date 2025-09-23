@@ -27,6 +27,10 @@ func HandleVersions(s *types.Server) http.HandlerFunc {
 func HandleLessons(s *types.Server) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
+		// キャッシュを無効化してレッスン更新を即座に反映
+		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		w.Header().Set("Pragma", "no-cache")
+		w.Header().Set("Expires", "0")
 		version := r.URL.Query().Get("version")
 		if version == "" {
 			http.Error(w, "Version parameter is required", http.StatusBadRequest)
@@ -43,7 +47,8 @@ func HandleLessons(s *types.Server) http.HandlerFunc {
 // CodeRunRequest represents a code execution request with version support
 type CodeRunRequest struct {
 	Code    string `json:"code"`
-	Version string `json:"version"`    // 実行するGoバージョン（フロントエンドで決定済み）
+	Version string `json:"version"` // 実行するGoバージョン（フロントエンドで決定済み）
+	EnvVars string `json:"env_vars"` // 環境変数（例: "GOEXPERIMENT=jsonv2"）
 }
 
 // CodeRunResponse represents a code execution response with version info
@@ -89,6 +94,7 @@ func HandleRun(w http.ResponseWriter, r *http.Request) {
 		Version:    req.Version,
 		AutoDetect: false, // フロントエンドで決定済みなので自動検出不要
 		Timeout:    30 * time.Second,
+		EnvVars:    req.EnvVars, // 環境変数を追加
 	}
 
 	log.Printf("[DEBUG] HandleRun: Using version: %s", req.Version)

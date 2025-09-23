@@ -24,12 +24,13 @@ class LessonDisplay {
         // 参考リンクを表示
         this.displayLessonLinks(lesson);
 
+        // 環境変数プリセットを設定
+        this.setupEnvPresets(lesson);
+
         // レッスンコードを読み込み
         const codeEditor = document.getElementById('code-editor');
         if (codeEditor) {
-            // まず保存されたコードをチェック
-            const savedCode = localStorage.getItem(`lesson-${lesson.version}-${lesson.id}-code`);
-            codeEditor.value = savedCode || lesson.code || '';
+            codeEditor.value = lesson.code || '';
         }
 
         // 出力をクリア
@@ -174,6 +175,154 @@ class LessonDisplay {
         }
 
         return links;
+    }
+
+    setupEnvPresets(lesson) {
+        const envPresetsContainer = document.getElementById('env-presets');
+        const envInfoText = document.getElementById('env-info-text');
+
+        if (!envPresetsContainer) return;
+
+        // 既存のプリセット表示をクリア
+        envPresetsContainer.innerHTML = '';
+
+        // レッスンに環境変数プリセットがある場合
+        if (lesson.env_presets && lesson.env_presets.length > 0) {
+            // .env形式のテキストを表示
+            const presetDisplay = document.createElement('div');
+            presetDisplay.className = 'env-preset-display';
+
+            const title = document.createElement('h5');
+            title.textContent = '利用可能な環境変数:';
+            title.style.margin = '0 0 0.5rem 0';
+            title.style.fontSize = '0.9rem';
+            title.style.color = '#495057';
+            presetDisplay.appendChild(title);
+
+            lesson.env_presets.forEach(preset => {
+                const presetItem = document.createElement('div');
+                presetItem.className = 'env-preset-item';
+                presetItem.style.marginBottom = '0.75rem';
+                presetItem.style.padding = '0.5rem';
+                presetItem.style.background = '#f8f9fa';
+                presetItem.style.border = '1px solid #e9ecef';
+                presetItem.style.borderRadius = '4px';
+                presetItem.style.cursor = 'pointer';
+                presetItem.style.transition = 'background-color 0.2s';
+
+                // プリセット名と説明
+                const presetHeader = document.createElement('div');
+                presetHeader.style.display = 'flex';
+                presetHeader.style.justifyContent = 'space-between';
+                presetHeader.style.alignItems = 'center';
+                presetHeader.style.marginBottom = '0.25rem';
+
+                const presetName = document.createElement('strong');
+                presetName.textContent = preset.name;
+                presetName.style.fontSize = '0.85rem';
+                presetName.style.color = '#495057';
+
+                const copyBtn = document.createElement('button');
+                copyBtn.textContent = 'コピー';
+                copyBtn.style.fontSize = '0.75rem';
+                copyBtn.style.padding = '2px 6px';
+                copyBtn.style.border = '1px solid #6c757d';
+                copyBtn.style.background = 'white';
+                copyBtn.style.borderRadius = '3px';
+                copyBtn.style.cursor = 'pointer';
+
+                presetHeader.appendChild(presetName);
+                presetHeader.appendChild(copyBtn);
+
+                // .env形式の値（複数行対応）
+                const envValue = document.createElement('pre');
+
+                // カンマ区切りの環境変数を複数行に変換
+                const formatEnvVars = (envString) => {
+                    if (envString.includes(',')) {
+                        return envString.split(',')
+                            .map(env => env.trim())
+                            .filter(env => env.length > 0)
+                            .join('\n');
+                    }
+                    return envString;
+                };
+
+                envValue.textContent = formatEnvVars(preset.value);
+                envValue.style.display = 'block';
+                envValue.style.fontSize = '0.8rem';
+                envValue.style.background = '#e9ecef';
+                envValue.style.padding = '0.5rem';
+                envValue.style.borderRadius = '3px';
+                envValue.style.marginBottom = '0.25rem';
+                envValue.style.fontFamily = 'Monaco, Consolas, "Courier New", monospace';
+                envValue.style.whiteSpace = 'pre';
+                envValue.style.overflow = 'auto';
+                envValue.style.margin = '0';
+                envValue.style.lineHeight = '1.4';
+
+                // 説明
+                const description = document.createElement('small');
+                description.textContent = preset.description;
+                description.style.color = '#6c757d';
+                description.style.fontSize = '0.75rem';
+
+                presetItem.appendChild(presetHeader);
+                presetItem.appendChild(envValue);
+                presetItem.appendChild(description);
+
+                // クリックでコピー
+                const copyToInput = () => {
+                    const envVarsInput = document.getElementById('env-vars');
+                    if (envVarsInput) {
+                        envVarsInput.value = preset.value;
+                        envVarsInput.focus();
+
+                        // 視覚的フィードバック
+                        const originalText = copyBtn.textContent;
+                        const originalBg = copyBtn.style.background;
+                        copyBtn.style.background = '#28a745';
+                        copyBtn.style.color = 'white';
+                        copyBtn.textContent = '✓';
+
+                        setTimeout(() => {
+                            copyBtn.style.background = originalBg;
+                            copyBtn.style.color = '';
+                            copyBtn.textContent = originalText;
+                        }, 1000);
+                    }
+                };
+
+                copyBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    copyToInput();
+                });
+
+                presetItem.addEventListener('click', copyToInput);
+
+                // ホバー効果
+                presetItem.addEventListener('mouseenter', () => {
+                    presetItem.style.background = '#e9ecef';
+                });
+                presetItem.addEventListener('mouseleave', () => {
+                    presetItem.style.background = '#f8f9fa';
+                });
+
+                presetDisplay.appendChild(presetItem);
+            });
+
+            envPresetsContainer.appendChild(presetDisplay);
+
+            // 情報テキストを更新
+            if (envInfoText) {
+                envInfoText.textContent = `💡 ${lesson.env_presets.length}個の環境変数設定例が利用可能です（クリックでコピー）`;
+            }
+        } else {
+            // プリセットがない場合
+            if (envInfoText) {
+                envInfoText.textContent = '💡 このレッスンには環境変数設定例がありません';
+            }
+        }
     }
 }
 

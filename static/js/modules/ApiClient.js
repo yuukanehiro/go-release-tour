@@ -120,9 +120,14 @@ class ApiClient {
                 throw new Error('バージョンが決定できませんでした');
             }
 
+            // 環境変数の取得
+            const envVarsInput = document.getElementById('env-vars');
+            const envVars = envVarsInput ? envVarsInput.value.trim() : '';
+
             const payload = {
                 code: code,
-                version: detectedVersion
+                version: detectedVersion,
+                env_vars: envVars
             };
 
             // ペイロード検証

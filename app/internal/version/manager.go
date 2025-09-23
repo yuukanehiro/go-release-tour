@@ -256,28 +256,28 @@ func (m *Manager) parseVersion(version string) float64 {
 func (m *Manager) isFeatureSupported(version float64, feature string) bool {
 	// 機能別の最小バージョン要件
 	featureRequirements := map[string]float64{
-		"generics":           1.18,
-		"workspace":          1.18,
-		"type-parameters":    1.18,
-		"atomic-types":       1.19,
-		"memory-arenas":      1.19,
-		"comparable-types":   1.20,
-		"slice-to-array":     1.20,
-		"errors-join":        1.20,
-		"builtin-functions":  1.21,
-		"slices-package":     1.21,
-		"maps-package":       1.21,
-		"for-range-int":      1.22,
-		"enhanced-routing":   1.22,
-		"loop-variables":     1.22,
-		"structured-logging": 1.23,
-		"iterators":          1.23,
-		"generic-aliases":    1.24,
-		"swiss-tables":       1.24,
-		"weak-pointers":      1.24,
+		"generics":             1.18,
+		"workspace":            1.18,
+		"type-parameters":      1.18,
+		"atomic-types":         1.19,
+		"memory-arenas":        1.19,
+		"comparable-types":     1.20,
+		"slice-to-array":       1.20,
+		"errors-join":          1.20,
+		"builtin-functions":    1.21,
+		"slices-package":       1.21,
+		"maps-package":         1.21,
+		"for-range-int":        1.22,
+		"enhanced-routing":     1.22,
+		"loop-variables":       1.22,
+		"structured-logging":   1.23,
+		"iterators":            1.23,
+		"generic-aliases":      1.24,
+		"swiss-tables":         1.24,
+		"weak-pointers":        1.24,
 		"container-gomaxprocs": 1.25,
-		"synctest":           1.25,
-		"json-v2":            1.25,
+		"synctest":             1.25,
+		"json-v2":              1.25,
 	}
 
 	requiredVersion, exists := featureRequirements[feature]
@@ -308,10 +308,10 @@ func (m *Manager) Status() map[string]interface{} {
 	}
 
 	return map[string]interface{}{
-		"total_versions":        len(m.versions),
-		"available_versions":    availableCount,
-		"multi_version_support": true,
+		"total_versions":            len(m.versions),
+		"available_versions":        availableCount,
+		"multi_version_support":     true,
 		"explicit_version_required": true,
-		"versions":              m.GetAllVersionConfigs(),
+		"versions":                  m.GetAllVersionConfigs(),
 	}
 }

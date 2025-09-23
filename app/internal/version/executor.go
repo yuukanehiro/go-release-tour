@@ -17,25 +17,26 @@ import (
 
 // ExecutionRequest represents a code execution request
 type ExecutionRequest struct {
-	Code            string            `json:"code"`
-	Version         string            `json:"version,omitempty"`     // 明示的なバージョン指定
-	AutoDetect      bool              `json:"auto_detect,omitempty"` // コードからバージョン自動検出
-	Timeout         time.Duration     `json:"timeout,omitempty"`     // 実行タイムアウト
-	Environment     map[string]string `json:"environment,omitempty"` // 環境変数
-	WorkingDir      string            `json:"working_dir,omitempty"` // 作業ディレクトリ
-	StrictVersion   bool              `json:"strict_version,omitempty"` // 厳密なバージョンチェック
+	Code          string            `json:"code"`
+	Version       string            `json:"version,omitempty"`        // 明示的なバージョン指定
+	AutoDetect    bool              `json:"auto_detect,omitempty"`    // コードからバージョン自動検出
+	Timeout       time.Duration     `json:"timeout,omitempty"`        // 実行タイムアウト
+	Environment   map[string]string `json:"environment,omitempty"`    // 環境変数
+	EnvVars       string            `json:"env_vars,omitempty"`       // 環境変数文字列（例: "GOEXPERIMENT=jsonv2"）
+	WorkingDir    string            `json:"working_dir,omitempty"`    // 作業ディレクトリ
+	StrictVersion bool              `json:"strict_version,omitempty"` // 厳密なバージョンチェック
 }
 
 // ExecutionResult represents the result of code execution
 type ExecutionResult struct {
-	Output        string        `json:"output"`
-	Error         string        `json:"error,omitempty"`
-	ExitCode      int           `json:"exit_code"`
-	ExecutionTime time.Duration `json:"execution_time"`
-	GoVersion     string        `json:"go_version"`
-	UsedVersion   string        `json:"used_version"`    // 実際に使用されたバージョン
-	DetectedVersion string      `json:"detected_version,omitempty"` // 検出されたバージョン
-	VersionPath   string        `json:"version_path,omitempty"`     // 使用されたGoバイナリのパス
+	Output          string        `json:"output"`
+	Error           string        `json:"error,omitempty"`
+	ExitCode        int           `json:"exit_code"`
+	ExecutionTime   time.Duration `json:"execution_time"`
+	GoVersion       string        `json:"go_version"`
+	UsedVersion     string        `json:"used_version"`               // 実際に使用されたバージョン
+	DetectedVersion string        `json:"detected_version,omitempty"` // 検出されたバージョン
+	VersionPath     string        `json:"version_path,omitempty"`     // 使用されたGoバイナリのパス
 }
 
 // Executor handles Go code execution with version management
@@ -191,10 +192,21 @@ func (e *Executor) executeCode(code string, config *VersionConfig, req Execution
 		}
 	}
 
+	// EnvVars文字列の処理（例: "GOEXPERIMENT=jsonv2"）
+	if req.EnvVars != "" {
+		envPairs := strings.Split(req.EnvVars, ",")
+		for _, pair := range envPairs {
+			if pair = strings.TrimSpace(pair); pair != "" {
+				cmd.Env = append(cmd.Env, pair)
+				log.Printf("[DEBUG] Execute: Added environment variable: %s", pair)
+			}
+		}
+	}
+
 	// 作業ディレクトリの設定
 	// WorkingDirはバージョン検出のみに使用し、実行時の作業ディレクトリは設定しない
 	// これにより、コードは一時ディレクトリで実行される
-	
+
 	// タイムアウト付きでコマンド実行
 	done := make(chan struct{})
 	var output []byte
@@ -291,10 +303,10 @@ func contains(s, substr string) bool {
 // ExecuteWithVersion is a convenience method for executing code with a specific version
 func (e *Executor) ExecuteWithVersion(code, version string) (*ExecutionResult, error) {
 	return e.Execute(ExecutionRequest{
-		Code:        code,
-		Version:     version,
-		AutoDetect:  false,
-		Timeout:     30 * time.Second,
+		Code:          code,
+		Version:       version,
+		AutoDetect:    false,
+		Timeout:       30 * time.Second,
 		StrictVersion: true,
 	})
 }

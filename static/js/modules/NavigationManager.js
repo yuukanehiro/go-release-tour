@@ -47,6 +47,41 @@ class NavigationManager {
             });
         }
 
+        // 環境変数プリセットボタン
+        const presetJsonV2Btn = document.getElementById('preset-jsonv2');
+        if (presetJsonV2Btn) {
+            presetJsonV2Btn.addEventListener('click', () => {
+                const envVarsInput = document.getElementById('env-vars');
+                if (envVarsInput) {
+                    envVarsInput.value = 'GOEXPERIMENT=jsonv2';
+                    // 視覚的フィードバック
+                    presetJsonV2Btn.style.background = '#28a745';
+                    presetJsonV2Btn.textContent = '✓ 設定済み';
+                    setTimeout(() => {
+                        presetJsonV2Btn.style.background = '#00ADD8';
+                        presetJsonV2Btn.textContent = 'JSON v2';
+                    }, 1500);
+                }
+            });
+        }
+
+        const presetClearBtn = document.getElementById('preset-clear');
+        if (presetClearBtn) {
+            presetClearBtn.addEventListener('click', () => {
+                const envVarsInput = document.getElementById('env-vars');
+                if (envVarsInput) {
+                    envVarsInput.value = '';
+                    // 視覚的フィードバック
+                    presetClearBtn.style.background = '#28a745';
+                    presetClearBtn.textContent = '✓ クリア済み';
+                    setTimeout(() => {
+                        presetClearBtn.style.background = '#6c757d';
+                        presetClearBtn.textContent = 'クリア';
+                    }, 1500);
+                }
+            });
+        }
+
 
         // Fullscreen toggle
         const fullscreenBtn = document.getElementById('fullscreen-btn');
