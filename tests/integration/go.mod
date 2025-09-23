@@ -1,6 +1,6 @@
 module go-release-tour-integration-tests
 
-go 1.25
+go 1.24
 
 require (
 	// 標準ライブラリのみ使用
