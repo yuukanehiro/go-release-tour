@@ -107,6 +107,55 @@ run_api_test() {
     return 0
 }
 
+# エラーケース専用のテスト関数（エラーが期待される場合）
+run_api_error_test() {
+    local test_name="$1"
+    local version="$2"
+    local code="$3"
+    local expected_error_pattern="$4"
+
+    echo "Testing: $test_name (Go $version) - Expected Error"
+
+    # テスト用ペイロード作成
+    local payload=$(jq -n \
+        --arg code "$code" \
+        --arg version "$version" \
+        '{
+            "code": $code,
+            "version": $version,
+            "auto_detect": false
+        }')
+
+    local start_time=$(date +%s.%3N)
+
+    # APIリクエスト実行
+    local response=$(curl -s -X POST "$BASE_URL/api/run" \
+        -H "Content-Type: application/json" \
+        -d "$payload" || echo '{"error": "Request failed"}')
+
+    local end_time=$(date +%s.%3N)
+    local execution_time=$(echo "$end_time - $start_time" | bc)
+
+    # レスポンス解析
+    local api_error=$(echo "$response" | jq -r '.error // empty')
+
+    if [ -z "$api_error" ]; then
+        echo "FAILED: Expected error but got success"
+        record_test "$test_name" "$version" "FAILED" "${execution_time}s" "Expected error but got success"
+        return 1
+    fi
+
+    if [ -n "$expected_error_pattern" ] && [[ "$api_error" != *"$expected_error_pattern"* ]]; then
+        echo "FAILED: Expected error containing '$expected_error_pattern', got: $api_error"
+        record_test "$test_name" "$version" "FAILED" "${execution_time}s" "Error pattern mismatch"
+        return 1
+    fi
+
+    echo "PASSED: Error correctly returned - ${execution_time}s"
+    record_test "$test_name" "$version" "PASSED" "${execution_time}s" "Error correctly handled: $api_error"
+    return 0
+}
+
 # サーバー接続確認
 echo "Checking server availability..."
 if ! curl -s "$BASE_URL/" > /dev/null; then
@@ -118,6 +167,9 @@ echo "Server is running"
 
 # テスト実行開始
 echo "Running E2E API Tests..."
+
+# 個別テストの失敗でスクリプトを停止しない
+set +e
 
 # Go 1.25 テスト
 run_api_test "Basic Hello World" "1.25" \
@@ -222,7 +274,7 @@ func main() {
 echo "Testing error cases..."
 
 # 無効なバージョン
-run_api_test "Invalid Version" "999.999" \
+run_api_error_test "Invalid Version" "999.999" \
 'package main
 
 import "fmt"
@@ -230,7 +282,7 @@ import "fmt"
 func main() {
     fmt.Println("This should fail")
 }' \
-""
+"サポートされていないGoバージョン"
 
 # バージョン指定なし
 echo "Testing: No Version Specified"
@@ -246,6 +298,9 @@ else
     echo "FAILED: Should have rejected request without version"
     record_test "No Version Specified" "none" "FAILED" "0s" "Should have rejected request"
 fi
+
+# エラーハンドリングを再び有効化
+set -e
 
 # 結果サマリー表示
 echo ""
