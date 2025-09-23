@@ -38,14 +38,14 @@ jobs:
     - name: Run golangci-lint (App)
       uses: golangci/golangci-lint-action@v6
       with:
-        version: v1.62.2
+        version: latest
         working-directory: app
         args: --timeout=5m
 
     - name: Run golangci-lint (Integration Tests)
       uses: golangci/golangci-lint-action@v6
       with:
-        version: v1.62.2
+        version: latest
         working-directory: tests/integration
         args: --timeout=2m
 

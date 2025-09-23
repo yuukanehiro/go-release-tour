@@ -9,6 +9,7 @@ linters:
     - gofmt
     - goimports
     - govet
+    - shadow
     - typecheck
     - errcheck
     - errname
@@ -37,7 +38,9 @@ linters-settings:
       - name: exported
         arguments: [checkPrivateReceivers, sayRepetitiveInsteadOfStutters]
   govet:
-    check-shadowing: true
+    settings:
+      shadow:
+        strict: true
   gocyclo:
     min-complexity: 15
   dupl:
@@ -78,6 +81,8 @@ issues:
   max-same-issues: 0
 
 output:
-  format: colored-line-number
+  formats:
+    - format: colored-line-number
+      path: stdout
   print-issued-lines: true
   print-linter-name: true
