@@ -4,28 +4,26 @@ run:
   tests: true
 
 linters:
+  disable-all: true
   enable:
     - gofmt
-    - gofumpt
     - goimports
     - govet
-    - ineffassign
-    - misspell
-    - revive
-    - staticcheck
     - typecheck
-    - unused
     - errcheck
-    - gosimple
-    - goconst
-    - unconvert
+    - errname
+    - errorlint
+    - nilerr
+    - makezero
+    - ineffassign
     - gosec
-    - gocyclo
-    - dupl
-    - gocritic
+    - noctx
+    - staticcheck
+    - unused
+    - copyloopvar
+    - decorder
+    - misspell
     - whitespace
-    - wsl
-    - nolintlint
 
 linters-settings:
   gofmt:
