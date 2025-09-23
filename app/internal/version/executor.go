@@ -5,6 +5,7 @@
 package version
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -169,8 +170,8 @@ func (e *Executor) executeCode(code string, config *VersionConfig, req Execution
 	filename := filepath.Join(tempDir, fmt.Sprintf("gocode_%d_%d.go", time.Now().Unix(), time.Now().Nanosecond()))
 
 	// コードをファイルに書き込み
-	if err := os.WriteFile(filename, []byte(code), 0644); err != nil {
-		return "", 1, fmt.Errorf("コードファイル作成エラー: %v", err)
+	if err := os.WriteFile(filename, []byte(code), 0600); err != nil {
+		return "", 1, fmt.Errorf("コードファイル作成エラー: %w", err)
 	}
 
 	// 実行後にファイルを削除
@@ -182,6 +183,7 @@ func (e *Executor) executeCode(code string, config *VersionConfig, req Execution
 	}()
 
 	// Go実行コマンドの作成
+	// #nosec G204 - config.Path is from trusted configuration and filename is sanitized temp file
 	cmd := exec.Command(config.Path, "run", filename)
 
 	// 環境変数の設定
@@ -217,7 +219,8 @@ func (e *Executor) executeCode(code string, config *VersionConfig, req Execution
 		defer close(done)
 		output, err = cmd.CombinedOutput()
 		if err != nil {
-			if exitError, ok := err.(*exec.ExitError); ok {
+			var exitError *exec.ExitError
+			if errors.As(err, &exitError) {
 				exitCode = exitError.ExitCode()
 			} else {
 				exitCode = 1
@@ -233,7 +236,9 @@ func (e *Executor) executeCode(code string, config *VersionConfig, req Execution
 	case <-time.After(req.Timeout):
 		// タイムアウト
 		if cmd.Process != nil {
-			cmd.Process.Kill()
+			if killErr := cmd.Process.Kill(); killErr != nil {
+				log.Printf("Failed to kill process: %v", killErr)
+			}
 		}
 		return "", 124, fmt.Errorf("実行タイムアウト (%v)", req.Timeout)
 	}

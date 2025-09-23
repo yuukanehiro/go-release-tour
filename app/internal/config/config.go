@@ -53,7 +53,7 @@ func (cm *ConfigManager) LoadConfig() error {
 	// 設定ファイルの絶対パスを取得
 	absPath, err := filepath.Abs(cm.configPath)
 	if err != nil {
-		return fmt.Errorf("設定ファイルパス解決エラー: %v", err)
+		return fmt.Errorf("設定ファイルパス解決エラー: %w", err)
 	}
 
 	// ファイルの存在確認
@@ -64,13 +64,13 @@ func (cm *ConfigManager) LoadConfig() error {
 	// ファイル読み込み
 	data, err := os.ReadFile(absPath)
 	if err != nil {
-		return fmt.Errorf("設定ファイル読み込みエラー: %v", err)
+		return fmt.Errorf("設定ファイル読み込みエラー: %w", err)
 	}
 
 	// JSON解析
 	var config Config
 	if err := json.Unmarshal(data, &config); err != nil {
-		return fmt.Errorf("設定ファイル解析エラー: %v", err)
+		return fmt.Errorf("設定ファイル解析エラー: %w", err)
 	}
 
 	cm.config = &config

@@ -111,7 +111,7 @@ func (pd *PathDetector) GetAllVersionsFromDirectory(baseDir string) ([]string, e
 
 	entries, err := filepath.Glob(filepath.Join(releasesDir, "*"))
 	if err != nil {
-		return nil, fmt.Errorf("ディレクトリのスキャンに失敗しました: %v", err)
+		return nil, fmt.Errorf("ディレクトリのスキャンに失敗しました: %w", err)
 	}
 
 	var versions []string

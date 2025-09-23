@@ -43,6 +43,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"go-release-tour/app/internal/handlers"
 	"go-release-tour/app/internal/lessons"
@@ -61,10 +62,10 @@ func addNoCacheHeaders(next http.Handler) http.Handler {
 }
 
 func main() {
-	server := &types.Server{
+	appServer := &types.Server{
 		Lessons: make(map[string][]types.Lesson),
 	}
-	lessons.LoadLessons(server)
+	lessons.LoadLessons(appServer)
 
 	// 静的ファイル（開発環境用キャッシュ無効化）
 	staticHandler := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))
@@ -74,8 +75,8 @@ func main() {
 	http.Handle("/tests/", http.StripPrefix("/tests/", http.FileServer(http.Dir("tests"))))
 
 	// APIエンドポイント
-	http.HandleFunc("/api/versions", handlers.HandleVersions(server))
-	http.HandleFunc("/api/lessons", handlers.HandleLessons(server))
+	http.HandleFunc("/api/versions", handlers.HandleVersions(appServer))
+	http.HandleFunc("/api/lessons", handlers.HandleLessons(appServer))
 	http.HandleFunc("/api/run", handlers.HandleRun)
 	http.HandleFunc("/api/version-info", handlers.HandleVersionInfo)
 
@@ -95,5 +96,12 @@ func main() {
 		fmt.Printf("Go Release Tour server starting on :%s\n", port)
 	}
 	fmt.Printf("Visit http://localhost:%s\n", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+
+	httpServer := &http.Server{
+		Addr:         ":" + port,
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		IdleTimeout:  60 * time.Second,
+	}
+	log.Fatal(httpServer.ListenAndServe())
 }

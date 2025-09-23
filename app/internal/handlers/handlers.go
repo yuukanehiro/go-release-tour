@@ -19,7 +19,10 @@ func HandleVersions(s *types.Server) http.HandlerFunc {
 		for version := range s.Lessons {
 			versions = append(versions, version)
 		}
-		json.NewEncoder(w).Encode(versions)
+		if err := json.NewEncoder(w).Encode(versions); err != nil {
+			log.Printf("Failed to encode versions: %v", err)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
 	}
 }
 
@@ -37,7 +40,10 @@ func HandleLessons(s *types.Server) http.HandlerFunc {
 			return
 		}
 		if lessons, exists := s.Lessons[version]; exists {
-			json.NewEncoder(w).Encode(lessons)
+			if err := json.NewEncoder(w).Encode(lessons); err != nil {
+				log.Printf("Failed to encode lessons: %v", err)
+				http.Error(w, "Internal server error", http.StatusInternalServerError)
+			}
 		} else {
 			http.Error(w, "Version not found", http.StatusNotFound)
 		}
@@ -47,7 +53,7 @@ func HandleLessons(s *types.Server) http.HandlerFunc {
 // CodeRunRequest represents a code execution request with version support
 type CodeRunRequest struct {
 	Code    string `json:"code"`
-	Version string `json:"version"` // 実行するGoバージョン（フロントエンドで決定済み）
+	Version string `json:"version"`  // 実行するGoバージョン（フロントエンドで決定済み）
 	EnvVars string `json:"env_vars"` // 環境変数（例: "GOEXPERIMENT=jsonv2"）
 }
 
@@ -81,7 +87,9 @@ func HandleRun(w http.ResponseWriter, r *http.Request) {
 		response := CodeRunResponse{
 			Error: "バージョンが指定されていません",
 		}
-		json.NewEncoder(w).Encode(response)
+		if err := json.NewEncoder(w).Encode(response); err != nil {
+			log.Printf("Failed to encode response: %v", err)
+		}
 		return
 	}
 
@@ -106,7 +114,9 @@ func HandleRun(w http.ResponseWriter, r *http.Request) {
 		response := CodeRunResponse{
 			Error: fmt.Sprintf("コード検証エラー: %v", err),
 		}
-		json.NewEncoder(w).Encode(response)
+		if err := json.NewEncoder(w).Encode(response); err != nil {
+			log.Printf("Failed to encode response: %v", err)
+		}
 		return
 	}
 	log.Printf("[DEBUG] HandleRun: Code validation passed")
@@ -146,7 +156,9 @@ func HandleRun(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("[DEBUG] HandleRun: Sending response")
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("Failed to encode response: %v", err)
+	}
 }
 
 // HandleVersionInfo returns detailed version information
@@ -156,5 +168,7 @@ func HandleVersionInfo(w http.ResponseWriter, r *http.Request) {
 	manager := version.GetManager()
 	versionInfo := manager.Status()
 
-	json.NewEncoder(w).Encode(versionInfo)
+	if err := json.NewEncoder(w).Encode(versionInfo); err != nil {
+		log.Printf("Failed to encode version info: %v", err)
+	}
 }

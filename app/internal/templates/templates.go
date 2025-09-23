@@ -2,6 +2,7 @@ package templates
 
 import (
 	"html/template"
+	"log"
 	"net/http"
 )
 
@@ -314,6 +315,12 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 </body>
 </html>`
 
-	t, _ := template.New("index").Parse(tmpl)
-	t.Execute(w, nil)
+	t, err := template.New("index").Parse(tmpl)
+	if err != nil {
+		http.Error(w, "Template parse error", http.StatusInternalServerError)
+		return
+	}
+	if err := t.Execute(w, nil); err != nil {
+		log.Printf("Template execution error: %v", err)
+	}
 }

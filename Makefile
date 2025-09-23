@@ -1,6 +1,6 @@
 # Go Release Tour - Makefile
 
-.PHONY: help drop build init app dev clean logs status test test-verbose
+.PHONY: help drop build init app dev clean logs status test test-verbose lint
 
 # デフォルトターゲット
 help:
@@ -22,6 +22,7 @@ help:
 	@echo "  make test-verbose - Run all tests with verbose output"
 	@echo ""
 	@echo "Utilities:"
+	@echo "  make lint        - Run linters on the code"
 	@echo "  make clean       - Clean Docker artifacts only"
 	@echo "  make help        - Show this help message"
 
@@ -102,6 +103,13 @@ test-verbose:
 	@VERBOSE=true ./tests/integration/test_all_lessons.sh || echo "Integration tests completed with issues"
 	@echo "Test results saved in tests/results/"
 	@echo "All tests completed!"
+
+# Development tools
+lint:
+	@echo "Running linters..."
+	@command -v golangci-lint >/dev/null 2>&1 || (echo "Installing golangci-lint..." && go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest)
+	cd app && $$(go env GOPATH)/bin/golangci-lint run --timeout=5m
+	@echo "Linting complete!"
 
 # Aliases for convenience
 start: app
