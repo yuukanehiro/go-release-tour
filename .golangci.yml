@@ -36,8 +36,6 @@ linters-settings:
     rules:
       - name: exported
         arguments: [checkPrivateReceivers, sayRepetitiveInsteadOfStutters]
-  govet:
-    check-shadowing: true
   gocyclo:
     min-complexity: 15
   dupl:
@@ -80,6 +78,5 @@ issues:
 output:
   formats:
     - format: colored-line-number
-      path: stdout
   print-issued-lines: true
   print-linter-name: true
