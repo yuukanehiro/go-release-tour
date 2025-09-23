@@ -9,7 +9,6 @@ linters:
     - gofmt
     - goimports
     - govet
-    - shadow
     - typecheck
     - errcheck
     - errname
@@ -38,9 +37,7 @@ linters-settings:
       - name: exported
         arguments: [checkPrivateReceivers, sayRepetitiveInsteadOfStutters]
   govet:
-    settings:
-      shadow:
-        strict: true
+    check-shadowing: true
   gocyclo:
     min-complexity: 15
   dupl:
